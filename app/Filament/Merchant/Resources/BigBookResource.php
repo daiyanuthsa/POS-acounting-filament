@@ -19,8 +19,9 @@ class BigBookResource extends Resource
 {
     protected static ?string $model = BigBook::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-bookmark';
     protected static ?string $navigationGroup = 'Accountings';
+    protected static ?string $navigationLabel = 'Buku Besar';
     protected static ?int $navigationSort = 3;
 
 

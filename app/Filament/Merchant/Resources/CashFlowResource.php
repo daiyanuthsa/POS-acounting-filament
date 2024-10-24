@@ -17,7 +17,7 @@ class CashFlowResource extends Resource
 {
     protected static ?string $model = CashFlow::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $navigationGroup = 'Accountings';
     protected static ?string $pluralModelLabel = 'Jurnal Umum';
     protected static ?int $navigationSort = 2;

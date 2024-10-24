@@ -18,8 +18,10 @@ class AccountResource extends Resource
     protected static ?string $model = Account::class;
     protected static ?string $tenantOwnershipRelationshipName = 'team';
     protected static ?string $navigationGroup = 'Accountings';
+    protected static ?string $navigationLabel = 'Akun';
+    protected static ?string $pluralModelLabel = 'Akun';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
@@ -27,7 +29,7 @@ class AccountResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('code')
                     ->required()
-                    
+
                     ->maxLength(255)
                     ->rule(function ($livewire) {
                         $teamId = auth()->user()->team_id; // Mengambil team_id dari user saat ini

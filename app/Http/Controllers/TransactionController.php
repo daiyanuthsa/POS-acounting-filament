@@ -44,6 +44,20 @@ class TransactionController extends Controller
                         continue; // Jika akun produk tidak sesuai, lewati produk ini
                     }
 
+                    // Ambil akun UPC dan Persediaan berdasarkan parent_id (productAccount)
+                    $upcAccount = Account::where('accountType', 'UPC')
+                        ->where('parent_id', $productAccount->id)
+                        ->first();
+
+                    $supplyAccount = Account::where('accountType', 'Asset')
+                        ->where('parent_id', $productAccount->id)
+                        ->first();
+
+                    if (!$upcAccount || !$supplyAccount) {
+                        \Log::error('UPC or Supply account not found for product account ID: ' . $productAccount->id);
+                        continue; // Jika salah satu akun tidak ditemukan, lewati produk ini
+                    }
+
                     // Tambahkan transaksi debit ke akun dengan kode 1-11
                     CashFlow::create([
                         'user_id' => $order->user_id, // User ID dari order
@@ -65,6 +79,28 @@ class TransactionController extends Controller
                         'amount' => $product->price * $product->pivot->qty, // total amount
                         'type' => 'credit',
                     ]);
+
+                    // Tambahkan transaksi kredit ke akun HPP
+                    CashFlow::create([
+                        'user_id' => $order->user_id, // User ID dari order
+                        'team_id' => $order->team_id, // Team ID dari order
+                        'account_id' => $upcAccount->id, // Account UPC
+                        'transaction_date' => now()->format('Y-m-d'),
+                        'description' => 'Order ' . $order->id . ' product ' . $product->name,
+                        'amount' => $product->unit_cost * $product->pivot->qty, // total amount
+                        'type' => 'debit',
+                    ]);
+
+                    // Tambahkan transaksi kredit ke akun Persediaan
+                    CashFlow::create([
+                        'user_id' => $order->user_id, // User ID dari order
+                        'team_id' => $order->team_id, // Team ID dari order
+                        'account_id' => $supplyAccount->id, // Account Persediaan
+                        'transaction_date' => now()->format('Y-m-d'),
+                        'description' => 'Order ' . $order->id . ' product ' . $product->name,
+                        'amount' => $product->unit_cost * $product->pivot->qty, // total amount
+                        'type' => 'credit',
+                    ]);
                 } else {
                     \Log::error('Account ID or User ID not found for product ' . $product->id);
                 }
@@ -76,7 +112,4 @@ class TransactionController extends Controller
 
         return response()->json(['message' => 'Unrecorded orders processed and updated successfully.']);
     }
-
-
-
 }
