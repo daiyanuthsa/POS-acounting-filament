@@ -34,6 +34,10 @@ class Team extends Model
     {
         return $this->hasMany(CashFlow::class);
     }
+    public function stockMovements(): HasMany
+    {
+        return $this->hasMany(StockMovement::class);
+    }
 
     // public function getRouteKeyName()
     // {
