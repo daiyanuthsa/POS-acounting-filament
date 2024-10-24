@@ -22,8 +22,9 @@ class LabaRugiResource extends Resource
 {
     protected static ?string $model = LabaRugi::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
     protected static ?string $navigationGroup = 'Accountings';
+    protected static ?string $navigationLabel = 'Laba Rugi';
     protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
