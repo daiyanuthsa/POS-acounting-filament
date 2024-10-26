@@ -1,7 +1,11 @@
-export default function Home() {
+import React from 'react'
+
+const Home = () => {
     return (
-        <>
-            <h1 className="text-blue-600">HALOO</h1>
-        </>
-    );
+        <div>
+            HALO INI CUT
+        </div>
+    )
 }
+
+export default Home
