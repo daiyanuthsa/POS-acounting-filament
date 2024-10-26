@@ -6,7 +6,11 @@ module.exports = {
         "./resources/**/*.jsx",
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                'cust-yellow': '#FEE142',
+            },
+        },
     },
     plugins: [],
 };
