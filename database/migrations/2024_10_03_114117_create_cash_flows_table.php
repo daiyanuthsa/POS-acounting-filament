@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('team_id')->constrained()->cascadeOnDelete();
             $table->foreignId('account_id')->constrained();
             $table->date('transaction_date');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->unsignedBigInteger('amount');
             $table->enum('type', ['debit', 'credit']);
             $table->timestamps();

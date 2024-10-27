@@ -18,7 +18,9 @@ class StockMovementResource extends Resource
 {
     protected static ?string $model = StockMovement::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-truck';
+    protected static ?string $navigationGroup = 'Shop';
+    protected static ?string $navigationLabel = 'Stok Produk';
 
     public static function form(Form $form): Form
     {

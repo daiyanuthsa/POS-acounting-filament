@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('accountName');
             $table->enum('accountType', ['Asset', 'Liability', 'Equity', 'Revenue', 'Expense', 'UPC']);
+            $table->enum('asset_type', ['current', 'fixed'])->nullable();
             $table->timestamps();
         });
     }

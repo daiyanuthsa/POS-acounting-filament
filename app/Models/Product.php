@@ -16,18 +16,26 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'unit_cost',
+        'upc_id',
+        'stock_id'
     ];
 
     protected $casts = [
         'price' => MoneyCast::class,
-        'unit_cost' => MoneyCast::class,
     ];
 
     // Relasi ke Account
     public function account()
     {
         return $this->belongsTo(Account::class);
+    }
+    public function unitCost()
+    {
+        return $this->belongsTo(Account::class,'upc_id');
+    }
+    public function stockAccount()
+    {
+        return $this->belongsTo(Account::class, 'stock_id');
     }
 
     // Relasi ke User
