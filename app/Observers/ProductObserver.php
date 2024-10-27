@@ -28,13 +28,13 @@ class ProductObserver
     {
         $lastAccount = Account::where('code', 'like', '4-%')
             ->where('team_id', $product->team_id)
-            ->whereNull('parent_id')
             ->orderBy('code', 'desc')
             ->first();
 
         $newCode = $lastAccount
-            ? '4-' . (intval(substr($lastAccount->code, 2)) + 1)
-            : '4-1';
+            ? '4-' . str_pad((intval(substr($lastAccount->code, 2)) + 1), 3, '0', STR_PAD_LEFT)
+            : '4-100';
+
 
         return Account::create([
             'code' => $newCode,
@@ -74,8 +74,9 @@ class ProductObserver
             ->first();
 
         $newCode = $lastAccount
-            ? '5-11' . (intval(substr($lastAccount->code, 6)) + 1)
-            : '5-111';
+            ? '5-' . str_pad((intval(substr($lastAccount->code, 2)) + 1), 3, '0', STR_PAD_LEFT)
+            : '5-100';
+
 
         return Account::create([
             'code' => $newCode,

@@ -53,7 +53,8 @@ class AccountResource extends Resource
                         'Liability' => 'Liability',
                         'Equity' => 'Equity',
                         'Revenue' => 'Revenue',
-                        'Expense' => 'Expense'
+                        'Expense' => 'Expense',
+                        'UPC' => 'HPP'
                     ])
                     ->required()
                     ->reactive(),
@@ -77,11 +78,13 @@ class AccountResource extends Resource
                     ->label('Kode')
                     ->sortable('true'),
                 Tables\Columns\TextColumn::make('accountName')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('accountType'),
+                    ->searchable()
+                    ->label('Nama Akun'),
+                Tables\Columns\TextColumn::make('accountType')
+                    ->label('Tipe Akun'),
                 Tables\Columns\TextColumn::make('asset_type')
                     ->label('Tipe Asset')
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->formatStateUsing(function ($state) {
                         return match ($state) {
                             'fixed' => 'Aktiva Tetap',

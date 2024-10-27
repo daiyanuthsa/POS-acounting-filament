@@ -39,6 +39,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('laba_rugi');
+        DB::statement('DROP VIEW IF EXISTS laba_rugi');
     }
 };

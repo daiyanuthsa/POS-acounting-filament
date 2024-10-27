@@ -29,7 +29,7 @@ class Product extends Model
     {
         return $this->belongsTo(Account::class);
     }
-    public function unitCost()
+    public function upcAccount()
     {
         return $this->belongsTo(Account::class,'upc_id');
     }
