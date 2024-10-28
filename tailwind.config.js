@@ -10,6 +10,10 @@ module.exports = {
             colors: {
                 'cust-yellow': '#FEE142',
             },
+            fontFamily: {
+                dmsans: ['DM Sans', 'sans-serif'],
+                montserrat: ['Montserrat', 'sans-serif'],
+            },
         },
     },
     plugins: [],
