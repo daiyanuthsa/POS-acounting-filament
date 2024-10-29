@@ -8,7 +8,7 @@ const Profile = () => {
             <div className='flex flex-col items-center'>
                 <motion.h1
                     initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
                     className='text-cust-yellow font-bold text-2xl lg:text-4xl'
                 >
@@ -17,8 +17,8 @@ const Profile = () => {
 
                 <motion.h2
                     initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }}
                     className='font-bold text-2xl lg:text-4xl text-center'
                 >
                     Kabupaten Manggarai Timur
