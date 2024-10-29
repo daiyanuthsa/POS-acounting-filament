@@ -8,7 +8,7 @@ const Nav = () => {
             <div className='flex justify-between items-center'>
                 <ApplicationLogo />
                 <Link>
-                    <button className='font-bold font-dmsans text-lg rounded-xl bg-cust-yellow py-2 px-9 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95'>Login</button>
+                    <button className='font-bold font-dmsans text-sm lg:text-lg rounded-xl bg-cust-yellow py-2 px-5 lg:py-2 lg:px-9 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95'>Login</button>
                 </Link>
             </div>
         </section>
