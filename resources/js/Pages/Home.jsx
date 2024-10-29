@@ -5,6 +5,7 @@ import Hero from './HomeComponents/Hero'
 import Profile from './HomeComponents/Profile'
 import Wisata from './HomeComponents/Wisata'
 import FAQ from './HomeComponents/FAQ'
+import ProdukUMKM from './HomeComponents/ProdukUMKM'
 
 const Home = () => {
     return (
@@ -13,6 +14,7 @@ const Home = () => {
             <Hero />
             <Profile />
             <Wisata />
+            <ProdukUMKM/>
             <FAQ />
             <Footer />
         </section>
