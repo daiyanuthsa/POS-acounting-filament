@@ -7,12 +7,22 @@ module.exports = {
     ],
     theme: {
         extend: {
+            keyframes: {
+                scroll: {
+                    "0%": { transform: "translateX(0)" },
+                    "100%": { transform: "translateX(-100%)" },
+                },
+            },
+            animation: {
+                scroll: "scroll 30s linear infinite",
+            },
             colors: {
-                'cust-yellow': '#FEE142',
+                "cust-yellow": "#FEE142",
             },
             fontFamily: {
-                dmsans: ['DM Sans', 'sans-serif'],
-                montserrat: ['Montserrat', 'sans-serif'],
+                dmsans: ["DM Sans", "sans-serif"],
+                montserrat: ["Montserrat", "sans-serif"],
+                plusJakarta: ["Plus Jakarta Sans", "sans-serif"]
             },
         },
     },
