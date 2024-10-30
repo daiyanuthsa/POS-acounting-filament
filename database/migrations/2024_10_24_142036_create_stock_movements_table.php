@@ -21,6 +21,8 @@ return new class extends Migration
             $table->unsignedBigInteger('unit_cost')->nullable();
             $table->unsignedBigInteger('total');
             $table->string('notes')->nullable();
+            $table->unsignedBigInteger('remaining_quantity')->default(0); // Menambah kolom sisa quantity
+            $table->boolean('is_active')->default(true); // Status batch masih aktif/tidak
             $table->timestamps();
 
         });

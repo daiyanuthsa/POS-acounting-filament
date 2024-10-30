@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Casts\MoneyCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -52,6 +53,40 @@ class Product extends Model
     {
         return $this->belongsToMany(Order::class, 'product_orders', 'product_id', 'order_id')
             ->withPivot('qty');
+    }
+
+    // Relasi ke StockMovement
+    public function stockMovements(): HasMany
+    {
+        return $this->hasMany(StockMovement::class);
+    }
+
+    // Get total remaining stock
+    public function getTotalStock()
+    {
+        return $this->stockMovements()
+            ->where('type', 'in')
+            ->where('is_active', true)
+            ->sum('remaining_quantity');
+    }
+
+    // Get last batch stock
+    public function getLastBatchStock()
+    {
+        return $this->stockMovements()
+            ->where('type', 'in')
+            ->where('is_active', true)
+            ->first();
+    }
+
+    // Get all active batches
+    public function getActiveBatches()
+    {
+        return $this->stockMovements()
+            ->where('type', 'in')
+            ->where('is_active', true)
+            ->orderBy('created_at', 'asc')
+            ->get();
     }
 
     /**
