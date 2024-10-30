@@ -23,11 +23,11 @@ const Wisata = () => {
 
                 <p className='mt-8 md:hidden'>
                     Ayo, kunjungi Kabupaten Manggarai Timur dan rasakan sendiri kekayaan alam dan
-                    budaya yang tak terlupakan! Bersiaplah untuk menciptakan kenangan indah yang 
+                    budaya yang tak terlupakan! Bersiaplah untuk menciptakan kenangan indah yang
                     akan selalu terpatri dalam ingatanmu.
                 </p>
 
-                <div className='flex flex-col md:flex-row gap-10 items-center md:justify-between mt-14 lg:mt-32'>
+                <div className='flex flex-col md:flex-row gap-10 px-5 xl:px-0 items-center md:justify-between mt-14 lg:mt-32'>
                     {DataWisata.map((datawisata, index) => (
                         <motion.div
                             key={index}
@@ -36,10 +36,10 @@ const Wisata = () => {
                             transition={{ duration: 0.5, delay: index * 0.2, ease: "easeOut" }}
                             className=''
                         >
-                            <img src={datawisata.img} alt="image" className='w-60 md:w-48 lg:w-96 h-[200px] md:h-40 lg:h-[366px] rounded-t-2xl' />
-                            <div className='bg-cust-yellow w-60 md:w-48 lg:w-96 flex flex-col items-center gap-3 p-5 lg:p-8 rounded-b-2xl'>
-                                <h1 className='font-dmsans text-xl lg:text-2xl text-center'>{datawisata.title}</h1>
-                                <p className='font-plusJakarta font-light text-sm lg:text-sm text-center lg:text-start'>{datawisata.description}</p>
+                            <img src={datawisata.img} alt="image" className='w-full h-[200px] md:h-40 lg:h-[306px] xl:lg:h-[366px] rounded-t-2xl' />
+                            <div className='bg-cust-yellow w-auto flex flex-col items-center gap-2 lg:gap-3 p-5 lg:p-8 rounded-b-2xl h-60'>
+                                <h1 className='font-dmsans text-lg lg:text-xl xl:text-2xl text-center'>{datawisata.title}</h1>
+                                <p className='font-plusJakarta font-light text-xs lg:text-sm text-center lg:text-start'>{datawisata.description}</p>
                             </div>
                         </motion.div>
                     ))}

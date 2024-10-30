@@ -7,7 +7,7 @@ const Hero = () => {
     ]
 
     return (
-        <section className='relative lg:px-24 px-10 font-dmsans overflow-hidden'>
+        <section className='relative lg:px-24 px-10 pt-20 font-dmsans overflow-hidden'>
             sek
             {/* <div className="absolute inset-0 -z-10 flex animate-scroll space-x-0">
                 {images.map((image, index) => (
