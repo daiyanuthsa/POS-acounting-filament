@@ -19,7 +19,7 @@ const Nav = () => {
 
     return (
         <section
-            className={`fixed top-0 w-full z-50 lg:px-20 px-10 py-4 border-b-2 rounded-2xl shadow-md bg-white transition-all duration-300 ease-in-out ${isScrolled ? 'py-2 shadow-cust-yellow shadow-sm' : 'py-4'
+            className={`fixed top-0 w-full z-50 lg:px-20 px-10 py-4 border-b-2 rounded-b-2xl shadow-md bg-white transition-all duration-300 ease-in-out ${isScrolled ? 'py-2 shadow-cust-yellow2 shadow-sm' : 'py-4'
                 }`}
         >
             <div className='flex justify-between items-center'>
