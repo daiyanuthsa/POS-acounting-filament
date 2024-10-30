@@ -33,10 +33,7 @@ class ProductResource extends Resource
                     ->required()
                     ->numeric()
                     ->prefix('Rp'),
-                Forms\Components\TextInput::make('unit_cost')
-                    ->columnSpanFull()
-                    ->numeric()
-                    ->prefix('Rp'),
+
                 Forms\Components\Textarea::make(name: 'description')->columnSpanFull(),
 
             ]);
@@ -53,9 +50,11 @@ class ProductResource extends Resource
                     ->label('Harga Produk')
                     ->money('IDR')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('unit_cost')
-                    ->label('HPP')
-                    ->money('IDR')
+                Tables\Columns\TextColumn::make('total_stock')
+                    ->label('Stok Produk')
+                    ->state(function (Product $record): int {
+                        return $record->getTotalStock();
+                    })
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

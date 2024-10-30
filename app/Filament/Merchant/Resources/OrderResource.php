@@ -6,11 +6,13 @@ use App\Filament\Merchant\Resources\OrderResource\Pages;
 use App\Filament\Merchant\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use App\Models\Product;
+use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -28,12 +30,35 @@ class OrderResource extends Resource
         return $form
             ->schema([
 
-                Forms\Components\Repeater::make('productOrder')
+                Forms\Components\Repeater::make('products')
                     ->label('Pesanan')
-                    ->relationship()
+                    ->relationship('products')
                     ->schema([
                         Forms\Components\Select::make('product_id')
-                            ->relationship('product', 'name')
+                            ->options(function (callable $get, ?string $context = null) {
+                                // Get current record ID if we're in edit mode
+                                $currentId = $context;
+
+                                // Get all selected products from repeater
+                                $selectedProducts = collect($get('../../../productOrder') ?? [])
+                                    ->filter(function ($item) use ($currentId) {
+                                    return $item['product_id'] && $item['product_id'] !== $currentId;
+                                })
+                                    ->pluck('product_id')
+                                    ->toArray();
+
+                                // Query available products
+                                return Product::query()
+                                    ->where('team_id', Auth::user()->teams()->first()->id)
+                                    ->whereNotIn('id', $selectedProducts)
+                                    ->get()
+                                    ->mapWithKeys(function ($product) {
+                                    return [
+                                        $product->id => $product->name . ' (Stok: ' . $product->getLastBatchStock()->remaining_quantity . ')'
+                                    ];
+                                });
+                            })
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                             ->label('Nama Produk')
                             ->searchable()
                             ->preload()
@@ -74,17 +99,38 @@ class OrderResource extends Resource
                         Forms\Components\TextInput::make('qty')
                             ->required()
                             ->numeric()
-                            ->reactive()
+                            ->reactive()->rules([
+                                    'required',
+                                    'numeric',
+                                    'min:1',
+                                ])
                             ->afterStateUpdated(function ($state, callable $set, callable $get) {
                                 $productId = $get('product_id');
                                 if ($state && $productId) {
                                     $product = Product::find($productId);
                                     if ($product) {
+                                        $availableStock = $product->getLastBatchStock()->remaining_quantity;
+
+                                        // Jika quantity melebihi stok
+                                        if ($state > $availableStock) {
+                                            // Reset quantity ke stok maksimum
+                                            $set('qty', $availableStock);
+                                            $state = $availableStock;
+
+                                            // Tampilkan notifikasi
+                                            Notification::make()
+                                                ->warning()
+                                                ->title('Quantity melebihi stok')
+                                                ->body("Quantity disesuaikan dengan stok tersedia ({$availableStock})")
+                                                ->send();
+                                        }
+
+                                        // Update total
                                         $set('total', floatval($state) * floatval($product->price));
                                     }
                                 }
-                            })->afterStateHydrated(function ($state, callable $set, callable $get) {
-                                // Set ulang total saat form di-load ulang
+                            })
+                            ->afterStateHydrated(function ($state, callable $set, callable $get) {
                                 $productId = $get('product_id');
                                 if ($state && $productId) {
                                     $product = Product::find($productId);
@@ -102,11 +148,12 @@ class OrderResource extends Resource
                             ->dehydrated(false)
                             ->reactive()
                     ])
+                    ->minItems(1)
                     ->columns(4)
                     ->columnSpan(4)
                     ->afterStateUpdated(
                         function ($state, callable $set, callable $get) {
-                            $productOrders = $get('productOrder');
+                            $productOrders = $get('products');
 
                             if ($productOrders) {
                                 $grandTotal = collect($productOrders)->sum(function ($productOrder) {

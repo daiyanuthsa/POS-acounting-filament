@@ -7,70 +7,45 @@ use App\Models\Product;
 
 class ProductObserver
 {
-
-    /**
-     * Handle event "creating" pada model Product.
-     *
-     * @param  Product  $product
-     * @return void
-     */
     public function creating(Product $product)
     {
-        // Buat akun pendapatan dan set sebagai parent
         $revenueAccount = $this->createRevenueAccount($product);
         $product->account_id = $revenueAccount->id;
 
-        // Buat akun persediaan dan HPP sebagai child dari akun pendapatan
-        $this->createInventoryAccount($product, $revenueAccount);
-        $this->createCOGAccount($product, $revenueAccount);
+        $inventoryAccount = $this->createInventoryAccount($product);
+        $product->stock_id = $inventoryAccount->id;
+
+        $upcAccount = $this->createCOGAccount($product);
+        $product->upc_id = $upcAccount->id;
     }
 
-    /**
-     * Handle event "updating" pada model Product.
-     *
-     * @param  Product  $product
-     * @return void
-     */
     public function updating(Product $product)
     {
         $this->updateAssociatedAccounts($product);
     }
 
-    /**
-     * Buat Account Pendapatan untuk sebuah Product.
-     *
-     * @param  Product  $product
-     * @return Account
-     */
     private function createRevenueAccount(Product $product)
     {
         $lastAccount = Account::where('code', 'like', '4-%')
             ->where('team_id', $product->team_id)
-            ->whereNull('parent_id')
             ->orderBy('code', 'desc')
             ->first();
 
         $newCode = $lastAccount
-            ? '4-' . (intval(substr($lastAccount->code, 2)) + 1)
-            : '4-1';
+            ? '4-' . str_pad((intval(substr($lastAccount->code, 2)) + 1), 3, '0', STR_PAD_LEFT)
+            : '4-100';
+
 
         return Account::create([
             'code' => $newCode,
             'accountName' => 'Pendapatan ' . $product->name,
             'accountType' => 'Revenue',
-            'team_id' => auth()->user()->teams()->first()->id,
+            'team_id' => $product->team_id,
             'user_id' => $product->user_id,
         ]);
     }
 
-    /**
-     * Buat Account Persediaan sebagai child dari akun pendapatan.
-     *
-     * @param  Product  $product
-     * @param  Account  $parentAccount
-     * @return Account
-     */
-    private function createInventoryAccount(Product $product, Account $parentAccount)
+    private function createInventoryAccount(Product $product)
     {
         $lastAccount = Account::where('code', 'like', '1-14%')
             ->where('team_id', $product->team_id)
@@ -86,20 +61,12 @@ class ProductObserver
             'accountName' => 'Persediaan ' . $product->name,
             'accountType' => 'Asset',
             'asset_type' => 'current',
-            'team_id' => auth()->user()->teams()->first()->id,
+            'team_id' => $product->team_id,
             'user_id' => $product->user_id,
-            'parent_id' => $parentAccount->id,
         ]);
     }
 
-    /**
-     * Buat Account HPP sebagai child dari akun pendapatan.
-     *
-     * @param  Product  $product
-     * @param  Account  $parentAccount
-     * @return Account
-     */
-    private function createCOGAccount(Product $product, Account $parentAccount)
+    private function createCOGAccount(Product $product)
     {
         $lastAccount = Account::where('code', 'like', '5-11%')
             ->where('team_id', $product->team_id)
@@ -107,80 +74,65 @@ class ProductObserver
             ->first();
 
         $newCode = $lastAccount
-            ? '5-11' . (intval(substr($lastAccount->code, 6)) + 1)
-            : '5-111';
+            ? '5-' . str_pad((intval(substr($lastAccount->code, 2)) + 1), 3, '0', STR_PAD_LEFT)
+            : '5-100';
+
 
         return Account::create([
             'code' => $newCode,
             'accountName' => 'HPP ' . $product->name,
             'accountType' => 'UPC',
-            'team_id' => auth()->user()->teams()->first()->id,
+            'team_id' => $product->team_id,
             'user_id' => $product->user_id,
-            'parent_id' => $parentAccount->id,
         ]);
     }
 
-    /**
-     * Perbarui Account-account yang terkait dengan sebuah Product.
-     *
-     * @param  Product  $product
-     * @return void
-     */
     private function updateAssociatedAccounts(Product $product)
     {
         if ($product->account) {
-            // Update parent account (Pendapatan)
             $product->account->update([
                 'accountName' => 'Pendapatan ' . $product->name,
                 'team_id' => $product->team_id,
                 'user_id' => $product->user_id,
             ]);
 
-            // Update child accounts
-            foreach ($product->account->children as $childAccount) {
-                $prefix = '';
-                if (str_starts_with($childAccount->code, '1-14')) {
-                    $prefix = 'Persediaan ';
-                } elseif (str_starts_with($childAccount->code, '5-11')) {
-                    $prefix = 'HPP ';
-                }
+            if ($product->stock_id) {
+                $product->stockAccount->update([
+                    'accountName' => 'Persediaan ' . $product->name,
+                    'team_id' => $product->team_id,
+                    'user_id' => $product->user_id,
+                ]);
+            }
 
-                if ($prefix) {
-                    $childAccount->update([
-                        'accountName' => $prefix . $product->name,
-                        'team_id' => $product->team_id,
-                        'user_id' => $product->user_id,
-                    ]);
-                }
+            if ($product->upc_id) {
+                $product->upcAccount->update([
+                    'accountName' => 'HPP ' . $product->name,
+                    'team_id' => $product->team_id,
+                    'user_id' => $product->user_id,
+                ]);
             }
         } else {
-            // Jika tidak ada akun, buat baru
             $revenueAccount = $this->createRevenueAccount($product);
             $product->account_id = $revenueAccount->id;
-            $this->createInventoryAccount($product, $revenueAccount);
-            $this->createCOGAccount($product, $revenueAccount);
+
+            $inventoryAccount = $this->createInventoryAccount($product);
+            $product->stock_id = $inventoryAccount->id;
+
+            $upcAccount = $this->createCOGAccount($product);
+            $product->upc_id = $upcAccount->id;
         }
     }
 
-    /**
-     * Handle the Product "deleted" event.
-     */
     public function deleted(Product $product): void
     {
         //
     }
 
-    /**
-     * Handle the Product "restored" event.
-     */
     public function restored(Product $product): void
     {
         //
     }
 
-    /**
-     * Handle the Product "force deleted" event.
-     */
     public function forceDeleted(Product $product): void
     {
         //

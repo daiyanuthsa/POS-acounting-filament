@@ -19,7 +19,9 @@ class StockMovement extends Model
         'total',
         'notes',
         'team_id',
-        'user_id'
+        'user_id',
+        'remaining_quantity',
+       'is_active'
     ] ;
     protected $casts = [
         'total' => MoneyCast::class,
