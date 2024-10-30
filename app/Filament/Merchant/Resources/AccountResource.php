@@ -21,7 +21,7 @@ class AccountResource extends Resource
     protected static ?string $navigationLabel = 'Akun';
     protected static ?string $pluralModelLabel = 'Akun';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
     public static function form(Form $form): Form
     {
@@ -49,11 +49,11 @@ class AccountResource extends Resource
                 Forms\Components\Select::make('accountType')
                     ->label('Tipe Akun')
                     ->options([
-                        'Asset' => 'Asset',
-                        'Liability' => 'Liability',
-                        'Equity' => 'Equity',
-                        'Revenue' => 'Revenue',
-                        'Expense' => 'Expense',
+                        'Asset' => 'Aset',
+                        'Liability' => 'Hutang',
+                        'Equity' => 'Modal',
+                        'Revenue' => 'Pendapatan',
+                        'Expense' => 'Beban',
                         'UPC' => 'HPP'
                     ])
                     ->required()
@@ -81,7 +81,18 @@ class AccountResource extends Resource
                     ->searchable()
                     ->label('Nama Akun'),
                 Tables\Columns\TextColumn::make('accountType')
-                    ->label('Tipe Akun'),
+                    ->label('Tipe Akun')
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'Asset' => 'Aset',
+                            'Liability' => 'Hutang',
+                            'Equity' => 'Modal',
+                            'Revenue' => 'Pendapatan',
+                            'Expense' => 'Beban',
+                            'UPC' => 'HPP',
+                            default => ucfirst($state),
+                        };
+                    }),
                 Tables\Columns\TextColumn::make('asset_type')
                     ->label('Tipe Asset')
                     ->toggleable(isToggledHiddenByDefault: false)

@@ -53,12 +53,13 @@ class CashFlowResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('account.accountName')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Akun'),
                 Tables\Columns\TextColumn::make('transaction_date')
+                    ->label('Tanggal Transaksi')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')
+                    ->label('Deskripsi')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('debit_amount')
                     ->label('Debit')
@@ -74,10 +75,6 @@ class CashFlowResource extends Resource
                         return $record->type === 'credit' ? $record->amount : '-';
                     }),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

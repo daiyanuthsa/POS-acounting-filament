@@ -23,6 +23,7 @@ class StockResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-truck';
     protected static ?string $navigationGroup = 'Shop';
     protected static ?string $navigationLabel = 'Stok Produk';
+    protected static ?string $pluralModelLabel = 'Stok Produk';
 
     public static function form(Form $form): Form
     {
@@ -90,6 +91,10 @@ class StockResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Tanggal')
+                    ->dateTime('d M Y - H:i:s', 'Asia/Jakarta')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('product.name')
                     ->numeric()
                     ->sortable(),
@@ -117,10 +122,7 @@ class StockResource extends Resource
                     ->numeric()
                     ->money('IDR')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
                 //

@@ -22,8 +22,9 @@ class EquityStatementResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationLabel = 'Equity Statement';
+    // protected static ?string $navigationLabel = 'Equity Statement';
     protected static ?string $navigationGroup = 'Accountings';
+    protected static ?string $pluralModelLabel = 'Laporan Perubahan Modal';
     protected static ?int $navigationSort = 5;
 
     public static function table(Table $table): Table
@@ -161,8 +162,6 @@ class EquityStatementResource extends Resource
     {
         return [
             'index' => Pages\ListEquityStatements::route('/'),
-            'create' => Pages\CreateEquityStatement::route('/create'),
-            'edit' => Pages\EditEquityStatement::route('/{record}/edit'),
         ];
     }
 }

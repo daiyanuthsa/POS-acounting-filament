@@ -2,14 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\CashFlow;
-use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductOrder;
 use App\Models\StockMovement;
 use App\Models\Team;
-use App\Observers\CashFlowObserver;
-use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ProductOrderObserver;
 use App\Observers\StockObserver;
@@ -33,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Product::observe(ProductObserver::class);
         Team::observe(TeamObserver::class);
-        CashFlow::observe(CashFlowObserver::class);
+
         
         ProductOrder::observe(ProductOrderObserver::class);
         StockMovement::observe(StockObserver::class);

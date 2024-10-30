@@ -20,7 +20,7 @@ class BalanceSheetResource extends Resource
     protected static ?string $model = Account::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-chart-bar';
-    protected static ?string $navigationLabel = 'Balance Sheet';
+    protected static ?string $pluralModelLabel = 'Laporan Posisi Keuangan';
     protected static ?string $navigationGroup = 'Accountings';
     protected static ?int $navigationSort = 6;
 

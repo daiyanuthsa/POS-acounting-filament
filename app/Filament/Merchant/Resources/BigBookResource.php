@@ -22,13 +22,14 @@ class BigBookResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-bookmark';
     protected static ?string $navigationGroup = 'Accountings';
     protected static ?string $navigationLabel = 'Buku Besar';
+    protected static ?string $pluralModelLabel = 'Buku Besar';
     protected static ?int $navigationSort = 3;
 
 
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultGroup('account')
+            ->defaultGroup('account.accountName')
             ->columns([
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->label('Transaction Date')
@@ -37,7 +38,7 @@ class BigBookResource extends Resource
                 Tables\Columns\TextColumn::make('account.code') // Assuming the relationship to account exists
                     ->label('Kode')
                 ,
-                Tables\Columns\TextColumn::make('account') // Assuming the relationship to account exists
+                Tables\Columns\TextColumn::make('account.accountName') // Assuming the relationship to account exists
                     ->label('Account')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('debit')
@@ -106,7 +107,7 @@ class BigBookResource extends Resource
                     }),
             ], layout: FiltersLayout::AboveContent)
             ->groups([
-                Group::make('account')
+                Group::make('account.accountName')
                     ->collapsible()
             ])
             ->groupingSettingsHidden()
@@ -142,7 +143,7 @@ class BigBookResource extends Resource
     public static function getWidgets(): array
     {
         return [
-            
+
         ];
     }
 }
