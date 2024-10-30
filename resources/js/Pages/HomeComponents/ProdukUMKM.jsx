@@ -22,7 +22,7 @@ const ProdukUMKM = () => {
                 <p className='mt-8 md:hidden'>
                     Di Kabupaten Manggarai Timur, UMKM lokal terus berkembang, menghadirkan produk-produk unggulan yang dibuat <br /> dengan tangan terampil dan penuh dedikasi. Mulai dari kerajinan tangan hingga kuliner khas, semua <br /> tersedia untuk mendukung perekonomian daerah dan melestarikan budaya setempat.
                 </p>
-                <div className='flex flex-col md:flex-row gap-10 items-center md:justify-between mt-14 lg:mt-32'>
+                <div className='flex flex-col md:flex-row gap-10 px-5 xl:px-0 items-center md:justify-between mt-14 lg:mt-32'>
                     {DataProduk.map((dataproduk, index) => (
                         <motion.div
                             key={index}
@@ -31,11 +31,12 @@ const ProdukUMKM = () => {
                             transition={{ duration: 0.5, delay: index * 0.2, ease: "easeOut" }}
                             className=''
                         >
-                            <img src={dataproduk.img} alt="image" className='w-60 md:w-48 lg:w-96 h-[200px] md:h-40 lg:h-[366px] rounded-t-2xl' />
-                            <div className='bg-cust-yellow w-60 md:w-48 lg:w-96 flex flex-col items-center gap-3 p-5 lg:p-8 rounded-b-2xl'>
-                                <h1 className='font-dmsans text-xl lg:text-2xl text-center'>{dataproduk.title}</h1>
-                                <p className='font-plusJakarta font-light text-sm lg:text-sm text-center lg:text-start'>{dataproduk .description}</p>
+                            <img src={dataproduk.img} alt="image" className='w-full h-[200px] md:h-40 lg:h-[306px] xl:lg:h-[366px] rounded-t-2xl' />
+                            <div id='produk' className='bg-cust-yellow w-auto flex flex-col items-center gap-2 p-5 lg:p-6 xl:p-8 rounded-b-2xl h-60 lg:h-80'>
+                                <h1 className='font-dmsans text-lg lg:text-xl xl:text-2xl text-center'>{dataproduk.title}</h1>
+                                <p className='font-plusJakarta font-light text-[10px] lg:text-sm text-center lg:text-start'>{dataproduk.description}</p>
                             </div>
+
                         </motion.div>
                     ))}
                 </div>
