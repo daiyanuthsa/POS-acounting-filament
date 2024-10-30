@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
 
 const Hero = () => {
     const images = [
@@ -36,13 +37,23 @@ const Hero = () => {
                 />
             </div>
 
-            <div className='relative flex flex-col gap-16'>
-                <h1 className='font-medium text-2xl lg:text-5xl tracking-wide text-white w-4/5 md:w-3/4 xl:w-1/2'>
+            <div className='relative flex flex-col gap-10 lg:gap-16'>
+                <motion.h1
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className='font-medium text-2xl lg:text-5xl tracking-wide text-white w-4/5 md:w-3/4 xl:w-1/2'
+                >
                     Potensi Serta Kekayaan alam Kabupaten Manggarai Timur
-                </h1>
-                <p className='text-md lg:pb-10 lg:text-lg md:tracking-wide font-light text-cust-yellow2 text-justify w-4/5 md:w-3/4 xl:w-1/2'>
+                </motion.h1>
+                <motion.p
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }}
+                    className='text-md lg:pb-10 lg:text-lg md:tracking-wide font-light text-cust-yellow2 text-justify w-4/5 md:w-3/4 xl:w-1/2'
+                >
                     Selamat datang di Kabupaten Manggarai Timur, surga tersembunyi di Nusa Tenggara Timur! Dikenal dengan kekayaan alam yang menakjubkan, daerah ini menyuguhkan pemandangan yang memukau dan keanekaragaman hayati yang luar biasa.
-                </p>
+                </motion.p>
             </div>
             <div className='absolute bottom-0 left-0 w-full'>
                 <img
