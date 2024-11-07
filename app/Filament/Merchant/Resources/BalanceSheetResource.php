@@ -63,7 +63,9 @@ class BalanceSheetResource extends Resource
                             $query->whereYear('cash_flows.transaction_date', '<=', $data['value']);
                         }
                         return $query;
-                    }),
+                    })->selectablePlaceholder(false)
+
+                ,
             ], layout: FiltersLayout::AboveContent)
             ->groupsOnly()
             ->defaultGroup('accountName')

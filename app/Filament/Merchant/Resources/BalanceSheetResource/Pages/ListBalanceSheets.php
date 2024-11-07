@@ -14,7 +14,11 @@ class ListBalanceSheets extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        $decodequerystring = urldecode(request()->getQueryString());
         return [
+            Actions\Action::make('export')
+                ->label('Export')
+                ->url(url('/report-balancesheet?'. $decodequerystring)),
         ];
     }
     public function getTabs(): array
