@@ -71,9 +71,10 @@ class Product extends Model
     }
 
     // Get last batch stock
-    public function getLastBatchStock()
+    public function getLastBatchStock($teamId)
     {
         return $this->stockMovements()
+        ->where('team_id', $teamId)
             ->where('type', 'in')
             ->where('is_active', true)
             ->first();

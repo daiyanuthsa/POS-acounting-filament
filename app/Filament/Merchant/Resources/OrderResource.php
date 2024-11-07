@@ -39,6 +39,8 @@ class OrderResource extends Resource
                                 // Get current record ID if we're in edit mode
                                 $currentId = $context;
 
+                                $teamId = Auth::user()->teams()->first()->id;
+
                                 // Get all selected products from repeater
                                 $selectedProducts = collect($get('../../../productOrder') ?? [])
                                     ->filter(function ($item) use ($currentId) {
@@ -49,12 +51,12 @@ class OrderResource extends Resource
 
                                 // Query available products
                                 return Product::query()
-                                    ->where('team_id', Auth::user()->teams()->first()->id)
+                                    ->where('team_id', $teamId)
                                     ->whereNotIn('id', $selectedProducts)
                                     ->get()
                                     ->mapWithKeys(function ($product) {
                                     return [
-                                        $product->id => $product->name . ' (Stok: ' . $product->getLastBatchStock()->remaining_quantity . ')'
+                                        $product->id => $product->name . ' (Stok: ' . $product->getLastBatchStock(Auth::user()->teams()->first()->id)->remaining_quantity . ')'
                                     ];
                                 });
                             })
@@ -109,7 +111,7 @@ class OrderResource extends Resource
                                 if ($state && $productId) {
                                     $product = Product::find($productId);
                                     if ($product) {
-                                        $availableStock = $product->getLastBatchStock()->remaining_quantity;
+                                        $availableStock = $product->getLastBatchStock(Auth::user()->teams()->first()->id)->remaining_quantity;
 
                                         // Jika quantity melebihi stok
                                         if ($state > $availableStock) {

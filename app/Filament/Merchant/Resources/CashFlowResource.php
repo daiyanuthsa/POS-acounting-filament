@@ -4,7 +4,9 @@ namespace App\Filament\Merchant\Resources;
 
 use App\Filament\Merchant\Resources\CashFlowResource\Pages;
 use App\Filament\Merchant\Resources\CashFlowResource\RelationManagers;
+use App\Models\Account;
 use App\Models\CashFlow;
+use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -27,7 +29,21 @@ class CashFlowResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('account_id')
-                    ->relationship('account', 'accountName')
+                    // ->relationship(
+                    //     'account',
+                    //     'accountName',
+                    //     modifyQueryUsing: fn(Builder $query) => $query->where('team_id', Auth::user()->teams()->first()->id)
+                    // )
+                    ->options(function () {
+                        return Account::query()
+                            ->where('team_id', Auth::user()->teams()->first()->id)
+                            ->get()
+                            ->mapWithKeys(function ($account) {
+                                return [
+                                    $account->id => $account->accountName
+                                ];
+                            });
+                    })
                     ->searchable()
                     ->preload()
                     ->required(),
