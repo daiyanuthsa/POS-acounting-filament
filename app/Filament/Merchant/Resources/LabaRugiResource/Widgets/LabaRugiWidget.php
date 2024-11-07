@@ -3,6 +3,7 @@
 namespace App\Filament\Merchant\Resources\LabaRugiResource\Widgets;
 
 use App\Models\LabaRugi;
+use Auth;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -14,7 +15,9 @@ class LabaRugiWidget extends BaseWidget
 
     protected function getStats(): array
     {
+        $team_id = Auth::user()->teams()->first()->id;
         $totals = LabaRugi::query()
+            ->where('team_id', $team_id)
             ->select('type')
             ->selectRaw('SUM(debit - credit) as total')
             ->groupBy('type')
@@ -27,7 +30,7 @@ class LabaRugiWidget extends BaseWidget
 
         $labaRugi = $pendapatan - $pengeluaran - $hpp;
 
-        $formattedLabaRugi = 'Rp ' . number_format($labaRugi/100, 2);
+        $formattedLabaRugi = 'Rp ' . number_format($labaRugi / 100, 2);
         $status = $labaRugi >= 0 ? 'Laba' : 'Rugi';
         $color = $labaRugi >= 0 ? 'success' : 'danger';
 
