@@ -24,6 +24,10 @@ class ListBigBooks extends ListRecords
             DebitCreditWidget::class,
         ];
     }
+    public function getHeaderWidgetsColumns(): int|array
+    {
+        return 4;
+    }
 
     public function getTableFiltersForm(): Form
     {
