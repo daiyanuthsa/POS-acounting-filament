@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.laba-rugi-stat .fi-stats-overview-stat-description {
+    font-size: 0.75rem;
+}
+.laba-rugi-stat .fi-stats-overview-stat-value {
+    font-size: 1rem;
+}
