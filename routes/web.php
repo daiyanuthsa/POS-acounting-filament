@@ -18,6 +18,6 @@ Route::get('/changes-equity', function () {
 });
 
 
-Route::get('/report', [BalanceSheet::class, 'index']);
+Route::get('/report-balancesheet', [BalanceSheet::class, 'index']);
 
 Route::get('/update', [TransactionController::class, 'processUnrecordedOrders']);
