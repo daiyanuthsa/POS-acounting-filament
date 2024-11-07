@@ -4,6 +4,7 @@ namespace App\Filament\Merchant\Resources\BigBookResource\Widgets;
 
 
 use App\Models\BigBook;
+use Auth;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,6 +15,11 @@ use Carbon\Carbon;
 class DebitCreditWidget extends BaseWidget
 {
     public ?array $filters = [];
+    // protected int|string|array $columnSpan = 'full';
+    // protected int|string|array $columnSpan = [
+    //   'md' => 2,
+    //     'xl' => 2,  
+    // ];
 
     #[On('filterApplied')]
     public function updateFilters($filters): void
@@ -23,10 +29,12 @@ class DebitCreditWidget extends BaseWidget
 
     protected function getStats(): array
     {
-        $currentDebitTotal = $this->getCurrentPeriodTotal('debit');
-        $currentCreditTotal = $this->getCurrentPeriodTotal('credit');
-        $previousDebitTotal = $this->getPreviousPeriodTotal('debit');
-        $previousCreditTotal = $this->getPreviousPeriodTotal('credit');
+        $team_id = Auth::user()->teams()->first()->id;
+
+        $currentDebitTotal = $this->getCurrentPeriodTotal('debit', $team_id);
+        $currentCreditTotal = $this->getCurrentPeriodTotal('credit', $team_id);
+        $previousDebitTotal = $this->getPreviousPeriodTotal('debit', $team_id);
+        $previousCreditTotal = $this->getPreviousPeriodTotal('credit', $team_id);
 
         $debitPercentageChange = $this->calculatePercentageChange($currentDebitTotal, $previousDebitTotal);
         $creditPercentageChange = $this->calculatePercentageChange($currentCreditTotal, $previousCreditTotal);
@@ -54,14 +62,14 @@ class DebitCreditWidget extends BaseWidget
         return $previous > 0 ? (($current - $previous) / $previous) * 100 : 0;
     }
 
-    protected function getCurrentPeriodTotal(string $column): float
+    protected function getCurrentPeriodTotal(string $column, int $teamId): float
     {
-        return $this->applyFilters(BigBook::query())->sum($column);
+        return $this->applyFilters(BigBook::query()->where('team_id', $teamId))->sum($column);
     }
 
-    protected function getPreviousPeriodTotal(string $column): float
+    protected function getPreviousPeriodTotal(string $column, int $teamId): float
     {
-        $query = BigBook::query();
+        $query = BigBook::query()->where('team_id', $teamId);
 
         Log::info('Filters:', ['filters' => $this->filters]);
 
