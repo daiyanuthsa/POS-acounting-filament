@@ -43,6 +43,11 @@ class ProfitLossController extends Controller
 
     protected function getAccountBalances($startDate, $endDate, $accountType, $team_id)
     {
+        // Determine the balance calculation based on account type
+        $balanceExpression = $accountType === 'Revenue'
+            ? DB::raw("SUM(CASE WHEN cash_flows.type = 'credit' THEN cash_flows.amount ELSE 0 END) - SUM(CASE WHEN cash_flows.type = 'debit' THEN cash_flows.amount ELSE 0 END) as balance")
+            : DB::raw("SUM(CASE WHEN cash_flows.type = 'debit' THEN cash_flows.amount ELSE 0 END) - SUM(CASE WHEN cash_flows.type = 'credit' THEN cash_flows.amount ELSE 0 END) as balance");
+
         // Query to get the accounts with the specified type and their balances for the given date range and team
         $accounts = DB::table('accounts')
             ->leftJoin('cash_flows', function ($join) use ($startDate, $endDate, $team_id) {
@@ -53,7 +58,7 @@ class ProfitLossController extends Controller
             ->select(
                 'accounts.code as account_code',
                 'accounts.accountName as account_name',
-                DB::raw("SUM(CASE WHEN cash_flows.type = 'debit' THEN cash_flows.amount ELSE 0 END) - SUM(CASE WHEN cash_flows.type = 'credit' THEN cash_flows.amount ELSE 0 END) as balance")
+                $balanceExpression
             )
             ->where('accounts.team_id', $team_id)
             ->where('accounts.accountType', $accountType) // Filter for accounts with type
@@ -69,6 +74,7 @@ class ProfitLossController extends Controller
 
         return $accounts;
     }
+
 
 }
 
