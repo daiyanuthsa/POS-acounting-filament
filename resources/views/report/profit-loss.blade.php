@@ -112,7 +112,7 @@
 
                 <div class="flex justify-between font-semibold mb-4">
                     <span>Total Laba</span>
-                    <span>{{ number_format($totalReveue - $totalCOG - $totalExpense, 2) }}</span>
+                    <span>{{ number_format($totalRevenue - $totalCOG - $totalExpense, 2) }}</span>
                 </div>
             </div>
         </div>
