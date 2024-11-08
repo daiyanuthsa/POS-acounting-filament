@@ -20,9 +20,9 @@ class ProfitLossController extends Controller
         $endDate = request('tableFilters.to_date.to_date') ?? date('Y-m-d');
         $merchant = Auth::user()->teams()->first();
 
-        $revenue = $this->getAccountBalances($startDate, $endDate, 'Reveue', $merchant->id);
+        $revenue = $this->getAccountBalances($startDate, $endDate, 'Revenue', $merchant->id);
         $expense = $this->getAccountBalances($startDate, $endDate, 'Expense', $merchant->id);
-        $costOfGoods = $this->getAccountBalances($startDate, $endDate, 'Reveue', $merchant->id);
+        $costOfGoods = $this->getAccountBalances($startDate, $endDate, 'UPC', $merchant->id);
 
         // Generate the PDF with the balance sheet data
         $pdf = Pdf::loadView('report.profit-loss', [
