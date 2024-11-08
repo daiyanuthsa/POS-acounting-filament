@@ -14,9 +14,11 @@ class ListLabaRugis extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        $decodequerystring = urldecode(request()->getQueryString());
         return [
-            // Actions\CreateAction::make(),
-            Actions\Action::make('export')->label('Laporan Laba Rugi')
+            Actions\Action::make('export')
+            ->label('Laporan Laba Rugi')
+            ->url(url('/profitloss-report?'. $decodequerystring))
         ];
     }
 
