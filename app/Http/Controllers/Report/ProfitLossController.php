@@ -7,5 +7,8 @@ use Illuminate\Http\Request;
 
 class ProfitLossController extends Controller
 {
-    //
+    public function index()
+    {
+
+    }
 }
