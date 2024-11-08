@@ -91,7 +91,7 @@
                                 $totalExpense = 0; // Initialize a variable to hold the total
                             @endphp
 
-                            @foreach ($costOfGoods as $account)
+                            @foreach ($expense as $account)
                                 <tr>
                                     <td>{{ $account->account_code }}</td>
                                     <td>{{ $account->account_name }}</td>
