@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Report;
 use App\Casts\MoneyCast;
 use App\Http\Controllers\Controller;
 use Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 
@@ -18,11 +20,25 @@ class ProfitLossController extends Controller
         $endDate = request('tableFilters.to_date.to_date') ?? date('Y-m-d');
         $merchant = Auth::user()->teams()->first();
 
-        $revenue = $this->getAccountBalances($startDate, $endDate, 'Reveue',$merchant->id);
+        $revenue = $this->getAccountBalances($startDate, $endDate, 'Reveue', $merchant->id);
         $expense = $this->getAccountBalances($startDate, $endDate, 'Expense', $merchant->id);
         $costOfGoods = $this->getAccountBalances($startDate, $endDate, 'Reveue', $merchant->id);
 
-        return $startDate . ' - ' . $endDate;
+        // Generate the PDF with the balance sheet data
+        $pdf = Pdf::loadView('report.profit-loss', [
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'merchant' => $merchant,
+            'revenue' => $revenue,
+            'expense' => $expense,
+            'costOfGoods' => $costOfGoods
+        ])
+            ->setPaper('a4', 'potrait');
+        $formatedStartDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('d-m-Y');
+        $formatedEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('d-m-Y');
+
+        // Return the PDF as a stream (download in the browser)
+        return $pdf->stream('Laporan Posisi Keuangan ' . $merchant->name . '_' . $formatedStartDate . '-' . $formatedEndDate . '.pdf');
     }
 
     protected function getAccountBalances($startDate, $endDate, $accountType, $team_id)
