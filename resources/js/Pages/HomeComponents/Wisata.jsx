@@ -10,7 +10,7 @@ const Wisata = () => {
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className='text-cust-yellow font-bold text-2xl lg:text-4xl'
+                    className='text-cust-yellow font-bold text-2xl text-center md:text-start lg:text-4xl'
                 >
                     Tempat <span className='text-black'>Wisata</span>
                 </motion.h1>
@@ -21,7 +21,7 @@ const Wisata = () => {
                     akan selalu terpatri dalam ingatanmu.
                 </p>
 
-                <p className='mt-8 md:hidden'>
+                <p className='mt-8 md:hidden text-center'>
                     Ayo, kunjungi Kabupaten Manggarai Timur dan rasakan sendiri kekayaan alam dan
                     budaya yang tak terlupakan! Bersiaplah untuk menciptakan kenangan indah yang
                     akan selalu terpatri dalam ingatanmu.
@@ -36,8 +36,8 @@ const Wisata = () => {
                             transition={{ duration: 0.5, delay: index * 0.2, ease: "easeOut" }}
                             className=''
                         >
-                            <img src={datawisata.img} alt="image" className='w-full h-[200px] md:h-40 lg:h-[306px] xl:lg:h-[366px] rounded-t-2xl' />
-                            <div className='bg-cust-yellow w-auto flex flex-col items-center gap-2 lg:gap-3 p-5 lg:p-8 rounded-b-2xl h-60'>
+                            <img src={datawisata.img} alt="image" className='w-72 md:w-full  h-[200px] md:h-40 lg:h-[306px] xl:lg:h-[366px] rounded-t-2xl' />
+                            <div className='bg-cust-yellow w-72 md:w-full flex flex-col items-center gap-2 lg:gap-3 p-5 lg:p-8 rounded-b-2xl h-60'>
                                 <h1 className='font-dmsans text-lg lg:text-xl xl:text-2xl text-center'>{datawisata.title}</h1>
                                 <p className='font-plusJakarta font-light text-xs lg:text-sm text-center lg:text-start'>{datawisata.description}</p>
                             </div>
