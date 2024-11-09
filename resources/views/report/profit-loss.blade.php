@@ -10,25 +10,27 @@
 </head>
 
 <body class="p-8">
-    <div class="w-full">
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold">{{ $merchant->name }}</h1>
-            <h2 class="text-xl">Laporan Laba - Rugi</h2>
-            <p>Periode</p>
-            <p>{{ $startDate }} - {{ $endDate }} </p>
-            <p>(Dalam rupiah)</p>
-        </div>
-
-        <div class="flex justify-between">
-            <!-- Revenue Section -->
-            <div class="w-1/2 border-r pr-4">
-                <div class="mb-4">
-                    <table class="w-full text-left mb-4">
+    <section className='md:px-24 px-10 pt-20'>
+        <div className='flex flex-col items-center'>
+            <div className='title-report font-bold text-lg lg:text-2xl text-center'>
+                <h1>{{ $merchant->name }}</h1>
+                <h1>LAPORAN PERUBAHAN MODAL</h1>
+                <h5>{{ $startDate }} - {{ $endDate }}</h5>
+            </div>
+            <div id='table-report' className='lg:w-1/2 w-full pt-10 lg:pt-20 text-sm space-y-10 lg:text-lg'>
+                <div id='revenue'>
+                    <table className="w-full font-bold">
                         <tbody>
                             <tr>
-                                <th colspan="2">Pendapatan/Revenue</th>
-                                <th>{{ $endDate }}</th>
+                                <td>PENDAPATAN/<i>REVENUE</i></td>
+                                <td className="text-center border-b-2 px-1 lg:px-2 pb-2 border-black">
+                                    {{ $endDate }}</td>
+                                <td></td>
                             </tr>
+                        </tbody>
+                    </table>
+                    <table className="w-full ">
+                        <tbody>
                             @php
                                 $totalRevenue = 0; // Initialize a variable to hold the total
                             @endphp
@@ -36,87 +38,87 @@
                             @foreach ($revenue as $account)
                                 {{-- @if ($account->asset_type === 'current') --}}
                                 <tr>
-                                    <td>{{ $account->account_code }}</td>
-                                    <td>{{ $account->account_name }}</td>
-                                    <td class="text-right">{{ number_format($account->balance, 2) }}</td>
+                                    <td className='pl-5'>{{ $account->account_code }} {{ $account->account_name }}</td>
+                                    <td className="text-right">{{ number_format($account->balance, 2) }}</td>
                                 </tr>
                                 @php
                                     // Add the balance of the current account to the total
                                     $totalRevenue += $account->balance;
                                 @endphp
                             @endforeach
-                            <tr>
-                                <td colspan="2">Total Pendapatan</td>
-                                <td>{{ number_format($totalRevenue, 2) }}</td>
-                            </tr>
                         </tbody>
                     </table>
+                    <div className='flex justify-between font-bold'>
+                        <h4>JUMLAH PENDAPATAN</h4>
+                        <p>{{ number_format($totalRevenue, 2) }}</p>
+                    </div>
                 </div>
-                <div>
-                    <table class="w-full text-left mb-4">
+
+                <div id='bpp'>
+                    <div className='flex justify-between font-bold'>
+                        <h4>BEBAN POKOK PENJUALAN/<i>COST OF GOODS SOLD</i></h4>
+                    </div>
+                    <table className="w-full">
                         <tbody>
-                            <tr>
-                                <th colspan="3">BEBAN POKOK PENJUALAN/COST OF GOODS SOLD</th>
-                            </tr>
                             @php
                                 $totalCOG = 0; // Initialize a variable to hold the total
                             @endphp
 
                             @foreach ($costOfGoods as $account)
                                 <tr>
-                                    <td>{{ $account->account_code }}</td>
-                                    <td>{{ $account->account_name }}</td>
-                                    <td class="text-right">{{ number_format($account->balance, 2) }}</td>
+                                    <td className='pl-5'>{{ $account->account_code }} {{ $account->account_name }}
+                                    </td>
+                                    <td className="text-right">{{ number_format($account->balance, 2) }}</td>
                                 </tr>
                                 @php
                                     // Add the balance of the current account to the total
                                     $totalCOG += $account->balance;
                                 @endphp
                             @endforeach
-                            <tr>
-                                <td colspan="2">Total Beban Pokok Penjualan</td>
-                                <td>{{ number_format($totalCOG, 2) }}</td>
-                            </tr>
                         </tbody>
                     </table>
+                    <div className='flex justify-between font-bold'>
+                        <h4>JUMLAH BEBAN/<i>EXPENSES</i></h4>
+                        <p>{{ number_format($totalCOG, 2) }}</p>
+                    </div>
                 </div>
-                {{-- Beban / Expenses --}}
-                <div>
-                    <table class="w-full text-left mb-4">
+
+                <div id='beban'>
+                    <div className='flex justify-between font-bold'>
+                        <h4>BEBAN/<i>EXPENSES</i></h4>
+                    </div>
+                    <table className="w-full">
                         <tbody>
-                            <tr>
-                                <th colspan="3">BEBAN/Expenses</th>
-                            </tr>
                             @php
                                 $totalExpense = 0; // Initialize a variable to hold the total
                             @endphp
 
                             @foreach ($expense as $account)
                                 <tr>
-                                    <td>{{ $account->account_code }}</td>
-                                    <td>{{ $account->account_name }}</td>
-                                    <td class="text-right">{{ number_format($account->balance, 2) }}</td>
+                                    <td className='pl-5'>{{ $account->account_code }} {{ $account->account_name }}
+                                    </td>
+                                    <td className="text-right">{{ number_format($account->balance, 2) }}</td>
                                 </tr>
                                 @php
                                     // Add the balance of the current account to the total
                                     $totalExpense += $account->balance;
                                 @endphp
                             @endforeach
-                            <tr>
-                                <td colspan="2">Total Beban / Expenses</td>
-                                <td>{{ number_format($totalExpense, 2) }}</td>
-                            </tr>
                         </tbody>
                     </table>
-                </div>
-
-                <div class="flex justify-between font-semibold mb-4">
-                    <span>Total Laba</span>
-                    <span>{{ number_format($totalRevenue - $totalCOG - $totalExpense, 2) }}</span>
+                    <div className='flex justify-between font-bold'>
+                        <h4>JUMLAH BEBAN/<i>EXPENSES</i></h4>
+                        <p>{{ number_format($totalExpense, 2) }}</p>
+                    </div>
+                    <div id='profit' className='flex justify-between font-bold'>
+                        <h4>LABA USAHA</h4>
+                        <p>{{ number_format($totalRevenue - $totalCOG - $totalExpense, 2) }}</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
 </body>
 
 </html>
