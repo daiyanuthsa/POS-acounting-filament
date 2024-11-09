@@ -5,7 +5,6 @@ const Hero = () => {
     const images = [
         './images/home/HeroImage1.webp',
         './images/home/HeroImage2.webp',
-        //tambah je
     ];
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
