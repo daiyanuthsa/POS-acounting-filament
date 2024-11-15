@@ -7,6 +7,7 @@ use App\Filament\Merchant\Resources\EquityStatementResource\RelationManagers;
 use App\Models\Account;
 use App\Models\CashFlow;
 use App\Models\LabaRugi;
+use Auth;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
@@ -15,6 +16,7 @@ use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 
 class EquityStatementResource extends Resource
 {
@@ -93,10 +95,16 @@ class EquityStatementResource extends Resource
                                 $query->whereYear('transaction_date', '<=', $year);
                             });
                         });
-                    })->selectablePlaceholder(false),
+                    })
+                    ->selectablePlaceholder(false),
             ], layout: FiltersLayout::AboveContent)
-            // ->defaultGroup('accountName')
+            ->header(function () {
+                return view('partials.reload-notification');
+            })
+            ->description('Manage your clients here.')
+            ->heading('Clients')
             ->striped()
+            ->hiddenFilterIndicators()
             ->poll('10s');
     }
 
@@ -143,7 +151,9 @@ class EquityStatementResource extends Resource
     protected static function calculateLabaRugi(): float
     {
         $year = request()->input('tableFilters.year.value', date('Y'));
+        $team_id = Auth::user()->teams()->first()->id;
         $totals = LabaRugi::query()
+            ->where('team_id', $team_id)
             ->select('type')
             ->selectRaw('SUM(debit - credit) as total')
             ->whereYear('transaction_date', $year)
