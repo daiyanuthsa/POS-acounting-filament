@@ -1,0 +1,80 @@
+body {
+    padding: 2rem;
+}
+
+.container {
+    width: 100%;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.header h2 {
+    font-size: 1.25rem;
+}
+
+.balance-sections {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem; 
+    flex-wrap: wrap; /
+}
+
+.section {
+    width: 48%;
+    box-sizing: border-box; 
+}
+
+.section:first-child {
+    border-right: 2px solid black;
+    padding-right: 1rem;
+}
+
+.section:last-child {
+    padding-left: 1rem;
+}
+
+.section h3 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.subsection {
+    margin-bottom: 1rem;
+}
+
+.subsection h4,
+.subsection h5 {
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+table {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    
+}
+
+.final-total {
+    font-weight: bold;
+    margin-top: 1rem;
+}
