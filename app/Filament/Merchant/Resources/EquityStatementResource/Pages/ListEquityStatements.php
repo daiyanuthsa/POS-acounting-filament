@@ -12,7 +12,11 @@ class ListEquityStatements extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        $decodequerystring = urldecode(request()->getQueryString());
         return [
+            Actions\Action::make('export')
+                ->label('Laporan Perubahan Modal')
+                ->url(url('/equitystatement-report?' . $decodequerystring))
         ];
     }
 }
