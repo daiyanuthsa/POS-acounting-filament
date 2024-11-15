@@ -39,6 +39,12 @@ class ProfitLossController extends Controller
 
         // Return the PDF as a stream (download in the browser)
         return $pdf->stream('Laporan Posisi Keuangan ' . $merchant->name . '_' . $formatedStartDate . '-' . $formatedEndDate . '.pdf');
+        
+        // $pdf = Pdf::loadView('welcome')
+        //     ->setPaper('a4', 'potrait');
+
+        // // Return the PDF as a stream (download in the browser)
+        // return $pdf->stream('Laporan Posisi Keuangan ' . '.pdf');
     }
 
     protected function getAccountBalances($startDate, $endDate, $accountType, $team_id)
