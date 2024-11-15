@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Report\BalanceSheet;
+use App\Http\Controllers\Report\ProfitLossController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,7 @@ Route::get('/changes-equity', function () {
 });
 
 
-Route::get('/report', [BalanceSheet::class, 'index']);
+Route::get('/report-balancesheet', [BalanceSheet::class, 'index']);
+Route::get('/profitloss-report', [ProfitLossController::class, 'index']);
 
 Route::get('/update', [TransactionController::class, 'processUnrecordedOrders']);

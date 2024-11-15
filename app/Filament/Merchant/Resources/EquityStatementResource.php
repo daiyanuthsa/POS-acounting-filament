@@ -21,8 +21,6 @@ class EquityStatementResource extends Resource
     protected static ?string $model = Account::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-
-    // protected static ?string $navigationLabel = 'Equity Statement';
     protected static ?string $navigationGroup = 'Accountings';
     protected static ?string $pluralModelLabel = 'Laporan Perubahan Modal';
     protected static ?int $navigationSort = 5;
@@ -41,14 +39,22 @@ class EquityStatementResource extends Resource
                     ->label('Saldo Awal')
                     ->money('IDR')
                     ->getStateUsing(fn(Account $record) => $record->opening_balance)
+                    ->getStateUsing(function (Account $record) {
+                        $opening_balance = $record->opening_balance;
+                        $labaRugi = self::calculateRevenueBeforeYear();
+                        if ($record->code === '3-110') {
+                            $opening_balance += $labaRugi;
+                        }
+                        return $opening_balance;
+                    })
                     ->summarize(Sum::make()->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 2))),
                 Tables\Columns\TextColumn::make('movement')
                     ->label('Perubahan')
                     ->money('IDR')
                     ->getStateUsing(function (Account $record) {
                         $movement = $record->movement;
-                        if ($record->accountName === 'Modal Pemilik') {
-                            $labaRugi = self::calculateLabaRugi();
+                        $labaRugi = self::calculateLabaRugi();
+                        if ($record->code === '3-110') {
                             $movement += $labaRugi;
                         }
                         return $movement;
@@ -59,8 +65,8 @@ class EquityStatementResource extends Resource
                     ->money('IDR')
                     ->getStateUsing(function (Account $record) {
                         $closingBalance = $record->closing_balance / 100;
-                        if ($record->accountName === 'Modal Pemilik') {
-                            $labaRugi = self::calculateLabaRugi();
+                        $labaRugi = self::calculateLabaRugi();
+                        if ($record->code === '3-110') {
                             $closingBalance += $labaRugi;
                         }
                         return $closingBalance;
@@ -87,7 +93,7 @@ class EquityStatementResource extends Resource
                                 $query->whereYear('transaction_date', '<=', $year);
                             });
                         });
-                    }),
+                    })->selectablePlaceholder(false),
             ], layout: FiltersLayout::AboveContent)
             // ->defaultGroup('accountName')
             ->striped()
@@ -141,6 +147,25 @@ class EquityStatementResource extends Resource
             ->select('type')
             ->selectRaw('SUM(debit - credit) as total')
             ->whereYear('transaction_date', $year)
+            ->groupBy('type')
+            ->pluck('total', 'type')
+            ->toArray();
+
+        $pendapatan = abs($totals['Revenue'] ?? 0);
+        $pengeluaran = abs($totals['Expense'] ?? 0);
+        $hpp = abs($totals['UPC'] ?? 0);
+
+        return ($pendapatan - $pengeluaran - $hpp) / 100;
+    }
+
+    protected static function calculateRevenueBeforeYear(): float
+    {
+
+        $year = request()->input('tableFilters.year.value', date('Y'));
+        $totals = LabaRugi::query()
+            ->select('type')
+            ->selectRaw('SUM(debit - credit) as total')
+            ->whereYear('transaction_date', '<', $year)
             ->groupBy('type')
             ->pluck('total', 'type')
             ->toArray();

@@ -32,7 +32,7 @@ class Product extends Model
     }
     public function upcAccount()
     {
-        return $this->belongsTo(Account::class,'upc_id');
+        return $this->belongsTo(Account::class, 'upc_id');
     }
     public function stockAccount()
     {
@@ -73,11 +73,20 @@ class Product extends Model
     // Get last batch stock
     public function getLastBatchStock($teamId)
     {
-        return $this->stockMovements()
-        ->where('team_id', $teamId)
+        $lastBatch = $this->stockMovements()
+            ->where('team_id', $teamId)
             ->where('type', 'in')
             ->where('is_active', true)
             ->first();
+
+        // Return default structure if no batch found
+        if (!$lastBatch) {
+            return (object) [
+                'remaining_quantity' => 0
+            ];
+        }
+
+        return $lastBatch;
     }
 
     // Get all active batches

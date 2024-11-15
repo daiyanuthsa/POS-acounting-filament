@@ -5,7 +5,6 @@ const Hero = () => {
     const images = [
         './images/home/HeroImage1.webp',
         './images/home/HeroImage2.webp',
-        //tambah je
     ];
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -37,12 +36,12 @@ const Hero = () => {
                 />
             </div>
 
-            <div className='relative flex flex-col gap-10 lg:gap-16'>
+            <div className='relative flex flex-col gap-10 lg:gap-16 '>
                 <motion.h1
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className='font-medium text-2xl lg:text-5xl tracking-wide text-white w-4/5 md:w-3/4 xl:w-1/2'
+                    className='font-medium text-2xl lg:text-5xl tracking-wide text-center md:text-start text-white md:w-3/4 xl:w-1/2'
                 >
                     Potensi Serta Kekayaan alam Kabupaten Manggarai Timur
                 </motion.h1>
@@ -50,7 +49,7 @@ const Hero = () => {
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }}
-                    className='text-md lg:pb-10 lg:text-lg md:tracking-wide font-light text-cust-yellow2 text-justify w-4/5 md:w-3/4 xl:w-1/2'
+                    className='text-md lg:pb-10 lg:text-lg md:tracking-wide font-light text-cust-yellow2 text-center md:text-justify md:w-3/4 xl:w-1/2'
                 >
                     Selamat datang di Kabupaten Manggarai Timur, surga tersembunyi di Nusa Tenggara Timur! Dikenal dengan kekayaan alam yang menakjubkan, daerah ini menyuguhkan pemandangan yang memukau dan keanekaragaman hayati yang luar biasa.
                 </motion.p>
