@@ -5,11 +5,16 @@ namespace App\Filament\Merchant\Resources;
 use App\Filament\Merchant\Resources\AccountResource\Pages;
 use App\Filament\Merchant\Resources\AccountResource\RelationManagers;
 use App\Models\Account;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Actions\Action;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\HtmlString;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -25,24 +30,73 @@ class AccountResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $teamId = auth()->user()->teams()->first()->id;
+
         return $form
             ->schema([
                 Forms\Components\TextInput::make('code')
                     ->required()
+                    ->maxLength(5)
+                    ->live(onBlur: false)
+                    ->afterStateUpdated(function (string $state, $set, $get) use ($teamId) {
+                        $state = $state ?? '';
 
-                    ->maxLength(255)
-                    ->rule(function ($livewire) {
-                        $teamId = auth()->user()->team_id; // Mengambil team_id dari user saat ini
-            
-                        if ($livewire->record) {
-                            // Jika sedang dalam mode edit, cek apakah 'code' unik di dalam team_id yang sama, kecuali record yang sedang diedit
-                            return 'unique:accounts,code,' . $livewire->record->id . ',id,team_id,' . $livewire->record->team_id;
+                        if (empty($state)) {
+                            return;
                         }
 
-                        // Jika sedang dalam mode create, cek apakah 'code' unik di dalam team_id user
-                        return 'unique:accounts,code,NULL,id,team_id,' . $teamId;
+                        $exists = \DB::table('accounts')
+                            ->where('code', $state)
+                            ->where('team_id', $teamId)
+                            ->exists();
+
+                        if ($exists) {
+                            $set('code_error', 'Account Code sudah digunakan dalam tim ini!');
+                        } else {
+                            $set('code_error', null);
+                        }
                     })
-                    ->label('Account Code'),
+                    ->extraInputAttributes(fn(callable $get) => [
+                        'class' => $get('code_error') ? 'border-danger-600' : ''
+                    ])
+                    ->helperText(
+                        fn(callable $get) =>
+                        $get('code_error') ?
+                        new HtmlString('<span class="text-danger-600">' . $get('code_error') . '</span>') :
+                        'Masukkan Account Code yang unik'
+                    )
+                    ->dehydrateStateUsing(function (string $state) use ($teamId) {
+                        $exists = \DB::table('accounts')
+                            ->where('code', $state)
+                            ->where('team_id', $teamId)
+                            ->exists();
+
+                        if ($exists) {
+                            throw ValidationException::withMessages([
+                                'code' => 'Account Code sudah digunakan dalam tim ini!'
+                            ]);
+                        }
+
+                        return $state;
+                    })
+                    ->label('Account Code')
+                    ->rules([
+                        fn(Get $get): Closure => function (string $attribute, $value, Closure $fail) use ($teamId, $get) {
+                            $query = \DB::table('accounts')
+                                ->where('code', $value)
+                                ->where('team_id', $teamId);
+
+                            if ($get('id')) {
+                                $query->where('id', '<>', $get('id'));
+                            }
+
+                            $exists = $query->exists();
+
+                            if ($exists) {
+                                $fail("Kode akun {$value} sudah terdaftar!");
+                            }
+                        },
+                    ]),
                 Forms\Components\TextInput::make('accountName')
                     ->required()
                     ->maxLength(255),
@@ -143,6 +197,16 @@ class AccountResource extends Resource
             'index' => Pages\ListAccounts::route('/'),
             'create' => Pages\CreateAccount::route('/create'),
             'edit' => Pages\EditAccount::route('/{record}/edit'),
+        ];
+    }
+
+    public function getFormActions(): array
+    {
+        return [
+            Forms\Components\Button::make('submit')
+                ->label('Create Account')
+                ->disabled(fn() => $this->form->getState('is_create_disabled')) // Disable button based on form validation
+                ->submit() // Submit the form
         ];
     }
 }
