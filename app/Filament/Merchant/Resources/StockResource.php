@@ -59,10 +59,18 @@ class StockResource extends Resource
                     ->numeric()
                     ->reactive()
                     ->afterStateUpdated(function ($set, $get) {
-                        $quantity = $get('quantity');
-                        $total = $get('total');
-                        if ($quantity > 0 && $total) {
-                            $set('unit_cost', $total / $quantity);
+                        $quantity = floatval($get('quantity'));
+                        $total = floatval($get('total'));
+                        $unit_cost = floatval($get('unit_cost'));
+
+                        if ($quantity > 0) {
+                            if ($total > 0) {
+                                // Jika quantity dan total diisi, hitung unit_cost
+                                $set('unit_cost', $total / $quantity);
+                            } elseif ($unit_cost > 0) {
+                                // Jika quantity dan unit_cost diisi, hitung total
+                                $set('total', $quantity * $unit_cost);
+                            }
                         }
                     }),
 
@@ -72,16 +80,41 @@ class StockResource extends Resource
                     ->prefix('Rp')
                     ->reactive()
                     ->afterStateUpdated(function ($set, $get) {
-                        $quantity = $get('quantity');
-                        $total = $get('total');
-                        if ($quantity > 0 && $total) {
-                            $set('unit_cost', $total / $quantity);
+                        $quantity = floatval($get('quantity'));
+                        $total = floatval($get('total'));
+                        $unit_cost = floatval($get('unit_cost'));
+
+                        if ($total > 0) {
+                            if ($quantity > 0) {
+                                // Jika total dan quantity diisi, hitung unit_cost
+                                $set('unit_cost', $total / $quantity);
+                            } elseif ($unit_cost > 0) {
+                                // Jika total dan unit_cost diisi, hitung quantity
+                                $set('quantity', $total / $unit_cost);
+                            }
                         }
                     }),
+
                 Forms\Components\TextInput::make('unit_cost')
                     ->numeric()
+                    ->required()
                     ->prefix('Rp')
-                    ->reactive(),
+                    ->reactive()
+                    ->afterStateUpdated(function ($set, $get) {
+                        $quantity = floatval($get('quantity'));
+                        $total = floatval($get('total'));
+                        $unit_cost = floatval($get('unit_cost'));
+
+                        if ($unit_cost > 0) {
+                            if ($quantity > 0) {
+                                // Jika unit_cost dan quantity diisi, hitung total
+                                $set('total', $quantity * $unit_cost);
+                            } elseif ($total > 0) {
+                                // Jika unit_cost dan total diisi, hitung quantity
+                                $set('quantity', $total / $unit_cost);
+                            }
+                        }
+                    }),
                 Forms\Components\TextInput::make('notes')
                     ->maxLength(255),
             ]);
@@ -112,16 +145,13 @@ class StockResource extends Resource
                         'in' => 'success',
                     }),
                 Tables\Columns\TextColumn::make('quantity')
-                    ->numeric()
-                    ->sortable(),
+                    ->numeric(),
                 Tables\Columns\TextColumn::make('unit_cost')
                     ->numeric()
-                    ->money('IDR')
-                    ->sortable(),
+                    ->money('IDR'),
                 Tables\Columns\TextColumn::make('total')
                     ->numeric()
-                    ->money('IDR')
-                    ->sortable(),
+                    ->money('IDR'),
 
             ])
             ->filters([
