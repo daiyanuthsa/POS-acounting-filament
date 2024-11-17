@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+    font-size: 14px; 
+}
+
+.container {
+    width: 80%; 
+    margin: 0 auto;
+    text-align: justify;
+}
+
+.title-report {
+    text-align: center;
+    margin-bottom: 15px; 
+}
+
+.title-report h1, .title-report h2, .title-report h3 {
+    font-family: 'Anonymous Pro', monospace;
+    margin: 5px 0; 
+}
+
+.title-report h2 {
+    color: brown;
+}
+
+.single-content {
+    position: relative;
+    padding: 8px 0; 
+    margin-top: 10px; 
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.single-content .total, .single-content .nilai {
+    font-size: 14px;
+    font-weight: normal; 
+}
+
+.account-row {
+    border-bottom: 1px solid #ddd;
+}
+
+.account-row td {
+    padding: 6px 10px; 
+    text-align: left;
+}
+
+.account-row td.text-right {
+    text-align: right;
+}
+
+table {
+    width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+}
+
+table td {
+    padding: 6px 10px;
+    text-align: left;
+}
+
+table td.text-center {
+    text-align: center;
+}
+
+table td.text-right {
+    text-align: right;
+}
+
+h4 {
+    font-weight: 600;
+}
+
+#revenue, #bpp, #beban {
+    margin-bottom: 15px; 
+}
+
+#profit {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
