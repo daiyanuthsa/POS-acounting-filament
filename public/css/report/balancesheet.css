@@ -1,80 +1,84 @@
 body {
-    padding: 2rem;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+    font-size: 16px; 
 }
 
 .container {
-    width: 100%;
+    width: 70%;
+    margin: 0 auto;
+    text-align: justify;
 }
 
-.header {
+#title {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 20px;
 }
 
-.header h1 {
-    font-size: 1.5rem;
+#title p,
+#title h3 {
+    font-family: 'Anonymous Pro', monospace;
+    margin: 5px 0;
+}
+
+#title h1 {
+    color: #8B0000;
+    margin: 10px 0;
+    font-size: 32px; 
+}
+
+#aktiva h3, #pasiva h3 {
+    margin-top: 30px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    font-size: 24px; 
+}
+
+.single-content {
+    position: relative; 
+    padding: 10px 0;
+    margin-top: 15px; 
     font-weight: bold;
 }
 
-.header h2 {
-    font-size: 1.25rem;
+.single-content .deskripsi {
+    position: absolute;
+    left: 0; 
 }
 
-.balance-sections {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem; 
-    flex-wrap: wrap; /
-}
-
-.section {
-    width: 48%;
-    box-sizing: border-box; 
-}
-
-.section:first-child {
-    border-right: 2px solid black;
-    padding-right: 1rem;
-}
-
-.section:last-child {
-    padding-left: 1rem;
-}
-
-.section h3 {
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-
-.subsection {
-    margin-bottom: 1rem;
-}
-
-.subsection h4,
-.subsection h5 {
-    font-weight: 600;
-    margin-top: 0.5rem;
+.single-content .nilai {
+    position: absolute;
+    right: 0;
+    text-align: right;
+    width: 150px; 
 }
 
 table {
     width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+}
+
+table td {
+    padding: 8px 12px;
     text-align: left;
-    margin-bottom: 1rem;
+    font-size: 16px; 
 }
 
-.text-right {
-    text-align: right;
+.account-row .account-code,
+.account-row .account-name {
+    text-align: left;  
 }
 
-.total {
-    display: flex;
-    justify-content: space-between;
+.account-row .nilai {
+    text-align: right; 
+}
+
+h4, h5 {
+    margin: 10px 0;
     font-weight: 600;
-    margin-bottom: 1rem;
-    
-}
-
-.final-total {
-    font-weight: bold;
-    margin-top: 1rem;
+    font-size: 18px; 
 }
