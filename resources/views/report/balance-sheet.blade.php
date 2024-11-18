@@ -11,8 +11,8 @@
 <body>
     <div class="container">
         <div id="title">
-            <h3>{{ $merchant->name }}</h3>
-            <h1>Neraca (standar)</h1>
+            <h3>{{ strtoupper($merchant->name) }}</h3>
+            <h1>NERACA (STANDAR)</h1>
             <p>Per Tgl. 31 Desember {{ $year }}</p>
             <p>(Dalam rupiah)</p>
         </div>
@@ -24,7 +24,7 @@
             </div>
 
             <!-- Aktiva Section -->
-            <div id="aktiva">
+            <div id="aktiva" class="mb-4">
                 <h3>AKTIVA</h3>
                 <h4>Aktiva Lancar</h4>
                 <table>
@@ -86,7 +86,7 @@
 
             <!-- Pasiva Section -->
             <div id="pasiva">
-                <h3>PASIVA</h3>
+                <h3 class="mt-4">PASIVA</h3>
                 <h4>Hutang Lancar</h4>
                 <table>
                     <tbody>

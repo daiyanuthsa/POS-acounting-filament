@@ -10,7 +10,7 @@ use Flowframe\Trend\TrendValue;
 use Carbon\Carbon;
 class OrdersChart extends ChartWidget
 {
-    protected static ?string $heading = 'Pesanan';
+    protected static ?string $heading = 'Pesanan Bulanan';
 
     protected function getData(): array
     {

@@ -14,7 +14,7 @@
         <div class="flex flex-col items-center">
             <!-- Title Report Section -->
             <div class="title-report font-bold text-lg lg:text-2xl text-center mb-6">
-                <h1>{{ $merchant }}</h1>
+                <h1>{{ strtoupper($merchant) }}</h1>
                 <h2>LAPORAN PERUBAHAN MODAL</h2>
                 <h3>TAHUN {{ $year }}</h3>
             </div>

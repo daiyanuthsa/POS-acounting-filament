@@ -33,7 +33,7 @@ class BalanceSheet extends Controller
             'balanceSheetData' => $balanceSheetData,
             'pasiva' => $pasiva
         ])
-            ->setPaper('a4', 'landscape');
+            ->setPaper('a4', 'potrait');
 
         // Return the PDF as a stream (download in the browser)
         return $pdf->stream('Laporan Posisi Keuangan ' . $merchant->name . '_' . $year . '.pdf');
@@ -46,7 +46,7 @@ class BalanceSheet extends Controller
             ->leftJoin('cash_flows', function ($join) use ($year, $team_id) {
                 $join->on('accounts.id', '=', 'cash_flows.account_id')
                     ->where('cash_flows.team_id', '=', $team_id)
-                    ->whereYear('cash_flows.transaction_date', '=', $year);
+                    ->whereYear('cash_flows.transaction_date', '<=', $year);
             })
             ->select(
                 'accounts.code as account_code',

@@ -3,41 +3,44 @@ body {
     margin: 0;
     padding: 0;
     letter-spacing: 0.5px;
-    line-height: 1.4; 
-    font-size: 14px; 
+    line-height: 1.4;
+    font-size: 14px;
 }
 
 .container {
-    width: 80%; 
+    width: 80%;
     margin: 0 auto;
     text-align: justify;
 }
 
 .title-report {
     text-align: center;
-    margin-bottom: 15px; 
+    margin-bottom: 15px;
+    border-bottom: 2px solid black;
 }
 
 .title-report h3 {
-    font-family: 'Anonymous Pro', monospace;
-    margin: 5px 0; 
+    font-family: "Anonymous Pro", monospace;
+    margin: 5px 0;
 }
 
-.title-report h2 {
+.title-report h1 {
+    font-family: "Anonymous Pro", monospace;
     color: brown;
-    font-size: 20px; 
+    font-size: 20px;
+    margin: 5px 0;
 }
 
 .title-report h5 {
-    font-family: 'Anonymous Pro', monospace;
+    font-family: "Anonymous Pro", monospace;
     margin-top: 5px;
     font-size: 14px;
 }
 
 .single-content {
     position: relative;
-    padding: 8px 0; 
-    margin-top: 10px; 
+    padding: 8px 0;
+    margin-top: 10px;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
@@ -46,7 +49,7 @@ body {
 
 .single-content .total,
 .single-content .nilai {
-    font-size: 14px; 
+    font-size: 14px;
     font-weight: normal;
 }
 
@@ -55,7 +58,7 @@ body {
 }
 
 .account-row td {
-    padding: 6px 10px; 
+    padding: 6px 10px;
     text-align: left;
 }
 
@@ -70,7 +73,7 @@ table {
 }
 
 table td {
-    padding: 6px 10px; 
+    padding: 6px 10px;
     text-align: left;
 }
 
@@ -82,17 +85,23 @@ table td.text-right {
     text-align: right;
 }
 
-h4, h5 {
-    margin: 5px 0; 
+h4,
+h5 {
+    margin: 5px 0;
     font-weight: 600;
 }
 
-#revenue, #bpp, #beban {
-    margin-bottom: 15px; 
+#revenue,
+#bpp,
+#beban {
+    margin-bottom: 15px;
 }
 
 #profit {
-    margin-top: 10px; 
-    font-size: 16px; 
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+#table-end .account-end {
     font-weight: bold;
 }

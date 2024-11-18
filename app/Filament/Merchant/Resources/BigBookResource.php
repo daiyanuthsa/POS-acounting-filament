@@ -31,13 +31,8 @@ class BigBookResource extends Resource
         return $table
             ->defaultGroup('account.accountName')
             ->columns([
-                Tables\Columns\TextColumn::make('transaction_date')
-                    ->label('Transaction Date')
-                    ->sortable()
-                    ->date(),
                 Tables\Columns\TextColumn::make('account.code') // Assuming the relationship to account exists
-                    ->label('Kode')
-                ,
+                    ->label('Kode'),
                 Tables\Columns\TextColumn::make('account.accountName') // Assuming the relationship to account exists
                     ->label('Account')
                     ->sortable(),
@@ -52,10 +47,8 @@ class BigBookResource extends Resource
                 Tables\Columns\TextColumn::make('credit')
                     ->label('Credit Amount')
                     ->summarize(Sum::make()->label('Credit Total')->formatStateUsing(function ($state) {
-                        // Format total sum dengan format uang
                         return 'IDR ' . number_format($state / 100, 2);
                     }))
-                    // ->summarize(Sum::make()->label('Credit Total'))
                     ->money('IDR'),
             ])
             ->filters([
@@ -89,7 +82,7 @@ class BigBookResource extends Resource
                     ->form([
                         Forms\Components\Select::make('year')
                             ->label('Tahun')
-                            ->default(Carbon::now()->year)
+                            // ->default(Carbon::now()->year)
                             ->options(options: function () {
                                 return BigBook::selectRaw('YEAR(transaction_date) as year')
                                     ->distinct()
@@ -106,6 +99,7 @@ class BigBookResource extends Resource
                             );
                     }),
             ], layout: FiltersLayout::AboveContent)
+            ->groupsOnly()
             ->groups([
                 Group::make('account.accountName')
                     ->collapsible()

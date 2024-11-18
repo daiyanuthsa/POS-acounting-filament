@@ -21,6 +21,7 @@ class TopProducts extends BaseWidget
             ->query(
                 Product::query()
                     ->where('team_id', $teamId)
+                    ->whereMonth('product_orders.created_at', now()->month)
                     ->select([
                         'products.id',
                         'products.name',
@@ -30,6 +31,7 @@ class TopProducts extends BaseWidget
                     ->join('product_orders', 'products.id', '=', 'product_orders.product_id')
                     ->groupBy('products.id', 'products.name')
                     ->orderByDesc('total_sold')
+                    ->limit(5)
             )
             ->columns([
                 Tables\Columns\TextColumn::make('name')
@@ -42,6 +44,7 @@ class TopProducts extends BaseWidget
             ])
             ->defaultSort('total_sold', 'desc')
             ->striped()
-            ->paginated([5]);
+            ->paginated(false);
+
     }
 }

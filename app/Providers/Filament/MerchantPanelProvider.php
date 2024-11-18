@@ -33,6 +33,7 @@ class MerchantPanelProvider extends PanelProvider
             ->brandName('Merchant')
             ->login()
             ->registration(MerchantRegistration::class)
+            ->emailVerification()
             ->profile()
             ->colors([
                 'primary' => Color::Amber,
@@ -44,8 +45,7 @@ class MerchantPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Merchant/Widgets'), for: 'App\\Filament\\Merchant\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+
             ])
             ->middleware([
                 EncryptCookies::class,

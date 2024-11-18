@@ -73,25 +73,29 @@ class BalanceSheetResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $year = request()->input('tableFilters.year', date('Y')); // Mengambil tahun dari filter
+        $year = request('tableFilters.year', date('Y')); // Ambil tahun dari filter atau gunakan tahun saat ini
+        $teamId = auth()->user()->teams()->first()->id; // Ambil ID tim dari pengguna yang sedang login
 
         return parent::getEloquentQuery()
-            ->join('cash_flows', 'cash_flows.account_id', '=', 'accounts.id') // Join dengan cash_flows
+            ->leftJoin('cash_flows', function ($join) use ($year, $teamId) {
+                $join->on('accounts.id', '=', 'cash_flows.account_id')
+                    ->where('cash_flows.team_id', '=', $teamId)
+                    ->whereYear('cash_flows.transaction_date', '<=', $year); // Ambil transaksi sampai dengan tahun yang dipilih
+            })
             ->select('accounts.*')
             ->addSelect([
-                'calculated_balance' => function ($query) use ($year) {
-                    $query->selectRaw('SUM(CASE 
-                WHEN (accounts.accountType IN ("Liability", "Equity", "Revenue") AND cash_flows.type = "credit") 
-                    OR (accounts.accountType IN ("Asset", "Expense") AND cash_flows.type = "debit") 
-                THEN cash_flows.amount 
-                ELSE -cash_flows.amount 
-            END)')
-                        ->from('cash_flows')
-                        ->whereColumn('cash_flows.account_id', 'accounts.id')
-                        ->whereYear('cash_flows.transaction_date', '<=', $year); // Mengambil transaksi sampai dengan tahun yang dipilih
-                }
+                'calculated_balance' => DB::raw("
+                SUM(
+                    CASE
+                        WHEN accounts.accountType IN ('Liability', 'Equity', 'Revenue') AND cash_flows.type = 'credit' THEN cash_flows.amount
+                        WHEN accounts.accountType IN ('Asset', 'Expense') AND cash_flows.type = 'debit' THEN cash_flows.amount
+                        ELSE -cash_flows.amount
+                    END
+                ) AS calculated_balance
+            "),
             ])
-            ->orderBy('code');
+            ->groupBy('accounts.id') // Kelompokkan berdasarkan ID akun
+            ->orderBy('accounts.code'); // Urutkan berdasarkan kode akun
     }
     public static function getRelations(): array
     {

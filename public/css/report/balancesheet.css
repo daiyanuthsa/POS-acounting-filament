@@ -4,11 +4,11 @@ body {
     padding: 0;
     letter-spacing: 0.5px;
     line-height: 1.6;
-    font-size: 16px; 
+    font-size: 14px;
 }
 
 .container {
-    width: 70%;
+    width: 80%;
     margin: 0 auto;
     text-align: justify;
 }
@@ -16,44 +16,53 @@ body {
 #title {
     text-align: center;
     margin-bottom: 20px;
+    border-bottom: 2px solid black;
 }
 
-#title p,
 #title h3 {
-    font-family: 'Anonymous Pro', monospace;
+    font-family: "Anonymous Pro", monospace;
     margin: 5px 0;
+}
+#title p {
+    font-family: "Anonymous Pro", monospace;
+    margin: 5px 0;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 1.25;
 }
 
 #title h1 {
-    color: #8B0000;
-    margin: 10px 0;
-    font-size: 32px; 
+    font-family: "Anonymous Pro", monospace;
+    color: #8b0000;
+    margin: 5px 0;
+    font-size: 20px;
 }
 
-#aktiva h3, #pasiva h3 {
+#aktiva h3,
+#pasiva h3 {
     margin-top: 30px;
     border-bottom: 1px solid #ccc;
     padding-bottom: 5px;
-    font-size: 24px; 
+    font-size: 20px;
 }
 
 .single-content {
-    position: relative; 
+    position: relative;
     padding: 10px 0;
-    margin-top: 15px; 
+    margin-top: 15px;
     font-weight: bold;
 }
 
 .single-content .deskripsi {
     position: absolute;
-    left: 0; 
+    left: 0;
 }
 
 .single-content .nilai {
     position: absolute;
     right: 0;
     text-align: right;
-    width: 150px; 
+    width: 150px;
 }
 
 table {
@@ -65,20 +74,47 @@ table {
 table td {
     padding: 8px 12px;
     text-align: left;
-    font-size: 16px; 
+    font-size: 16px;
 }
 
 .account-row .account-code,
 .account-row .account-name {
-    text-align: left;  
+    text-align: left;
 }
 
 .account-row .nilai {
-    text-align: right; 
+    text-align: right;
 }
 
-h4, h5 {
+h4,
+h5 {
     margin: 10px 0;
     font-weight: 600;
-    font-size: 18px; 
+    font-size: 18px;
+}
+.mb-1 {
+    margin-bottom: 0.25rem; /* 4px */
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem; /* 8px */
+}
+
+.mb-3 {
+    margin-bottom: 0.75rem; /* 12px */
+}
+
+.mb-4 {
+    margin-bottom: 1rem; /* 16px */
+}
+
+.mb-5 {
+    margin-bottom: 1.25rem; /* 20px */
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem; /* 24px */
+}
+.mt-4 {
+    margin-top: 2.5rem; /* 16px */
 }
