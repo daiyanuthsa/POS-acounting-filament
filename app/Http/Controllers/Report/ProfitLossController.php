@@ -14,11 +14,19 @@ class ProfitLossController extends Controller
 {
     public function index()
     {
+        if (!Auth::check()) {
+            // Redirect to login if the user is not authenticated
+            return redirect('/merchant')->with('error', 'Please login first.');
+        }
         $startDate = request('tableFilters.from_date.from_date')
             ?? date('Y-m-d', strtotime('-1 week'));
 
         $endDate = request('tableFilters.to_date.to_date') ?? date('Y-m-d');
         $merchant = Auth::user()->teams()->first();
+        if (!$merchant) {
+            // Redirect to a specific path if no team is associated
+            return redirect('/merchant');
+        }
 
         $revenue = $this->getAccountBalances($startDate, $endDate, 'Revenue', $merchant->id);
         $expense = $this->getAccountBalances($startDate, $endDate, 'Expense', $merchant->id);
@@ -39,7 +47,7 @@ class ProfitLossController extends Controller
 
         // Return the PDF as a stream (download in the browser)
         return $pdf->stream('Laporan Posisi Keuangan ' . $merchant->name . '_' . $formatedStartDate . '-' . $formatedEndDate . '.pdf');
-        
+
         // $pdf = Pdf::loadView('welcome')
         //     ->setPaper('a4', 'potrait');
 

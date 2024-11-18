@@ -15,11 +15,20 @@ class BalanceSheet extends Controller
     //
     public function index()
     {
+        if (!Auth::check()) {
+            // Redirect to login if the user is not authenticated
+            return redirect('/merchant')->with('error', 'Please login first.');
+        }
+
         // Get the year from the request or default to current year
         $year = request('tableFilters.year.value') ?? date('Y');
 
         // Fetch the authenticated user's team
         $merchant = Auth::user()->teams()->first();
+        if (!$merchant) {
+            // Redirect to a specific path if no team is associated
+            return redirect('/merchant');
+        }
 
         // Get the balance sheet data for the given year and merchant's team
         $balanceSheetData = $this->getAccountBalances($year, $merchant->id);

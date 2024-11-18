@@ -15,9 +15,19 @@ class EquityStatementController extends Controller
 {
     public function index()
     {
+        if (!Auth::check()) {
+            // Redirect to login if the user is not authenticated
+            return redirect('/merchant')->with('error', 'Please login first.');
+        }
+
+        
         $year = request('tableFilters.year.value') ?? date('Y');
 
         $merchant = Auth::user()->teams()->first();
+        if (!$merchant) {
+            // Redirect to a specific path if no team is associated
+            return redirect('/merchant');
+        }
 
         $equityMovement = $this->getAccountBalances($year, 'Equity', $merchant->id);
         $openningBalance = $this->getTotalBalanceBeforeYear($year, 'Equity', $merchant->id);
