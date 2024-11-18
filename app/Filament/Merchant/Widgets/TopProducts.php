@@ -39,7 +39,6 @@ class TopProducts extends BaseWidget
 
                 Tables\Columns\TextColumn::make('total_sold')
                     ->label('Total Terjual')
-                    ->sortable()
                     ->alignRight(),
             ])
             ->defaultSort('total_sold', 'desc')

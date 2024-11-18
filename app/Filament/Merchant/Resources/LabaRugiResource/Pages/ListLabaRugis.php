@@ -17,8 +17,8 @@ class ListLabaRugis extends ListRecords
         $decodequerystring = urldecode(request()->getQueryString());
         return [
             Actions\Action::make('export')
-            ->label('Laporan Laba Rugi')
-            ->url(url('/profitloss-report?'. $decodequerystring))
+                ->label('Cetak Laporan')
+                ->url(url('/profitloss-report?' . $decodequerystring))
         ];
     }
 

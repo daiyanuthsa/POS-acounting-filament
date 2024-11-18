@@ -40,4 +40,18 @@ class StockMovement extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Otomatis mengisi user_id dengan ID user yang sedang login
+        static::creating(function ($model) {
+            if (!$model->user_id) {
+                $model->user_id = auth()->id();// Ambil ID user yang login
+            }
+            if (!$model->team_id) {
+                $model->team_id = auth()->user()->currentTeam->id;
+            }
+        });
+    }
 }

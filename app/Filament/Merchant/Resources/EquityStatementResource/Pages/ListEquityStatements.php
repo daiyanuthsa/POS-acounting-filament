@@ -15,7 +15,7 @@ class ListEquityStatements extends ListRecords
         $decodequerystring = urldecode(request()->getQueryString());
         return [
             Actions\Action::make('export')
-                ->label('Laporan Perubahan Modal')
+                ->label('Cetak Laporan')
                 ->url(url('/equitystatement-report?' . $decodequerystring))
         ];
     }

@@ -188,15 +188,20 @@ class OrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Tanggal Transaksi')
                     ->dateTime('d M Y - H:i:s', 'Asia/Jakarta')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('payment_type'),
+                Tables\Columns\TextColumn::make('payment_type')
+                    ->alignCenter()
+                    ->label('Tipe Pembayaran'),
                 Tables\Columns\TextColumn::make('payment_amount')
+                    ->label('Jumlah Pembayaran')
                     ->numeric()
                     ->money('IDR')
                     ->sortable(),

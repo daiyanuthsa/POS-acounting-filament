@@ -84,7 +84,7 @@ class BalanceSheet extends Controller
             ->leftJoin('cash_flows', function ($join) use ($year, $team_id) {
                 $join->on('accounts.id', '=', 'cash_flows.account_id')
                     ->where('cash_flows.team_id', '=', $team_id)
-                    ->whereYear('cash_flows.transaction_date', '=', $year);
+                    ->whereYear('cash_flows.transaction_date', '<=', $year);
             })
             ->select(
                 'accounts.code as account_code',

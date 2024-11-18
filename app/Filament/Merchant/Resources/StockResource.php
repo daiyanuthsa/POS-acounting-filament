@@ -28,19 +28,8 @@ class StockResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+            
             ->schema([
-                Forms\Components\TextInput::make('team_id')
-                    ->required()
-                    ->numeric()
-                    ->default(fn() => Auth::user()->teams()->first()->id)
-                    ->disabled()
-                    ->dehydrated(),
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric()
-                    ->default(fn() => Auth::id())
-                    ->disabled()
-                    ->dehydrated(),
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'name', function ($query) {
                         $query->where('team_id', Auth::user()->teams()->first()->id);
@@ -49,10 +38,13 @@ class StockResource extends Resource
                     ->label('Nama Produk')
                     ->searchable()  // Tambahkan fitur pencarian
                     ->preload(),
-                Forms\Components\TextInput::make('type')
+                Forms\Components\Select::make('type')
                     ->required()
                     ->default('in')
-                    ->disabled()
+                    ->options([
+                        'in' => 'Stok Masuk',
+                        'out' => 'Stok Keluar',
+                    ])
                     ->dehydrated(),
                 Forms\Components\TextInput::make('quantity')
                     ->required()
@@ -123,15 +115,18 @@ class StockResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal')
                     ->dateTime('d M Y - H:i:s', 'Asia/Jakarta')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('product.name')
+                    ->label('Nama Produk')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
+                    ->label('Tipe')
                     ->formatStateUsing(function ($state) {
                         return match ($state) {
                             'in' => 'Masuk',

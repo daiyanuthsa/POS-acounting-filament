@@ -30,6 +30,9 @@ class MerchantPanelProvider extends PanelProvider
         return $panel
             ->id('merchant')
             ->path('merchant')
+            ->brandLogo(asset('images/home/logo_bajo_light.png'))
+            ->darkModeBrandLogo(asset('images/home/logo_bajo_dark.png'))
+            ->brandLogoHeight('3rem')
             ->brandName('Merchant')
             ->login()
             ->registration(MerchantRegistration::class)

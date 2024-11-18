@@ -66,6 +66,9 @@ class BalanceSheetResource extends Resource
                     })->selectablePlaceholder(false),
             ], layout: FiltersLayout::AboveContent)
             ->groupsOnly()
+            ->header(function () {
+                return view('partials.reload-notification');
+            })
             ->defaultGroup('accountName')
             ->striped()
             ->poll('10s');

@@ -86,6 +86,9 @@ class LabaRugiResource extends Resource
                     ->default(true),
             ], layout: FiltersLayout::AboveContent)->filtersFormColumns(4)
             ->groupsOnly()
+            ->header(function () {
+                return view('partials.reload-notification');
+            })
             ->defaultGroup('account')
             ->actions([
                 Tables\Actions\ViewAction::make(),

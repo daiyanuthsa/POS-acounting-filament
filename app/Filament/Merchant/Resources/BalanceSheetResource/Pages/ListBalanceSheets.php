@@ -17,7 +17,7 @@ class ListBalanceSheets extends ListRecords
         $decodequerystring = urldecode(request()->getQueryString());
         return [
             Actions\Action::make('export')
-                ->label('Export')
+                ->label('Cetak Laporan')
                 ->url(url('/report-balancesheet?'. $decodequerystring)),
         ];
     }
