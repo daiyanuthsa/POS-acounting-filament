@@ -3,8 +3,8 @@ import React from 'react'
 
 const ApplicationLogo = () => {
     return (
-        <Link className="font-bold transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 font-dmsans">
-            LOGO
+        <Link className="transition duration-300 ease-in-out transform hover:scale-105 active:scale-95 font-dmsans">
+            <img src="Logo.webp" alt="logo" className='w-20'/>
         </Link>
     )
 }
