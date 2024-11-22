@@ -99,7 +99,6 @@ class BigBookResource extends Resource
                             );
                     }),
             ], layout: FiltersLayout::AboveContent)
-            ->groupsOnly()
             ->groups([
                 Group::make('account.accountName')
                     ->collapsible()

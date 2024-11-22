@@ -44,7 +44,7 @@ class EquityStatementResource extends Resource
                     ->getStateUsing(function (Account $record) {
                         $opening_balance = $record->opening_balance;
                         $labaRugi = self::calculateRevenueBeforeYear();
-                        if ($record->code === '3-110') {
+                        if ($record->code === '3-310') {
                             $opening_balance += $labaRugi;
                         }
                         return $opening_balance;
@@ -56,7 +56,7 @@ class EquityStatementResource extends Resource
                     ->getStateUsing(function (Account $record) {
                         $movement = $record->movement;
                         $labaRugi = self::calculateLabaRugi();
-                        if ($record->code === '3-110') {
+                        if ($record->code === '3-310') {
                             $movement += $labaRugi;
                         }
                         return $movement;
@@ -66,15 +66,17 @@ class EquityStatementResource extends Resource
                     ->label('Saldo Akhir')
                     ->money('IDR')
                     ->getStateUsing(function (Account $record) {
-                        $closingBalance = $record->closing_balance / 100;
+                        $closingBalance = $record->closing_balance;
+                        $saldoawal = self::calculateRevenueBeforeYear();
                         $labaRugi = self::calculateLabaRugi();
-                        if ($record->code === '3-110') {
+                        if ($record->code === '3-310') {
                             $closingBalance += $labaRugi;
+                            $closingBalance += $saldoawal;
                         }
                         return $closingBalance;
                     })
 
-                    ->summarize([Sum::make()->formatStateUsing(fn($state) => 'Rp ' . number_format($state / 100 + self::calculateLabaRugi(), 2))])
+                    ->summarize([Sum::make()->formatStateUsing(fn($state) => 'Rp ' . number_format($state + (self::calculateLabaRugi() + self::calculateRevenueBeforeYear()) , 2))])
                 ,
 
             ])
@@ -89,14 +91,11 @@ class EquityStatementResource extends Resource
                     })
                     ->label('Tahun')
                     ->default(date('Y'))
-                    ->query(function (Builder $query, array $data) {
-                        return $query->when($data['value'], function (Builder $query, $year) {
-                            $query->whereHas('cashFlow', function (Builder $query) use ($year) {
-                                $query->whereYear('transaction_date', '<=', $year);
-                            });
-                        });
-                    })
-                    ->selectablePlaceholder(false),
+                    ->selectablePlaceholder(false)
+                    ->query(function (Builder $query) {
+                        // Tidak memengaruhi query utama tabel
+                        return $query;
+                    }),
             ], layout: FiltersLayout::AboveContent)
             ->header(function () {
                 return view('partials.reload-notification');
@@ -122,32 +121,75 @@ class EquityStatementResource extends Resource
                 'accounts.accountName',
                 'accounts.accountType',
                 DB::raw("(
-                    SELECT COALESCE(SUM(CASE WHEN type = 'credit' THEN amount ELSE -amount END), 0)
-                    FROM cash_flows
-                    WHERE account_id = accounts.id AND transaction_date < '{$startDate}'
-                ) / 100 as opening_balance"),
+                SELECT COALESCE(SUM(
+                    CASE 
+                        WHEN cf1.type = 'credit' THEN cf1.amount 
+                        WHEN cf1.type = 'debit' THEN -cf1.amount 
+                        ELSE 0 
+                    END
+                ), 0)
+                FROM accounts AS a1
+                LEFT JOIN cash_flows AS cf1 ON cf1.account_id = a1.id 
+                    AND cf1.transaction_date < '{$startDate}'
+                WHERE a1.id = accounts.id
+            ) / 100 as opening_balance"),
                 DB::raw("(
-                    SELECT COALESCE(SUM(CASE WHEN type = 'credit' THEN amount ELSE -amount END), 0)
-                    FROM cash_flows
-                    WHERE account_id = accounts.id AND transaction_date BETWEEN '{$startDate}' AND '{$endDate}'
-                ) / 100 as movement"),
+                SELECT COALESCE(SUM(
+                    CASE 
+                        WHEN cf2.type = 'credit' THEN cf2.amount 
+                        WHEN cf2.type = 'debit' THEN -cf2.amount 
+                        ELSE 0 
+                    END
+                ), 0)
+                FROM accounts AS a2
+                LEFT JOIN cash_flows AS cf2 ON cf2.account_id = a2.id 
+                    AND cf2.transaction_date BETWEEN '{$startDate}' AND '{$endDate}'
+                WHERE a2.id = accounts.id
+            ) / 100 as movement"),
                 DB::raw("(
-                    SELECT COALESCE(SUM(CASE WHEN type = 'credit' THEN amount ELSE -amount END), 0)
-                    FROM cash_flows
-                    WHERE account_id = accounts.id AND transaction_date <= '{$endDate}'
-                ) as closing_balance")
+                SELECT COALESCE(SUM(
+                    CASE 
+                        WHEN cf3.type = 'credit' THEN cf3.amount 
+                        WHEN cf3.type = 'debit' THEN -cf3.amount 
+                        ELSE 0 
+                    END
+                ), 0)
+                FROM accounts AS a3
+                LEFT JOIN cash_flows AS cf3 ON cf3.account_id = a3.id 
+                    AND cf3.transaction_date <= '{$endDate}'
+                WHERE a3.id = accounts.id
+            ) / 100 as closing_balance")
             ])
-            ->where('accountType', 'Equity')
-            ->where('team_id', $teamId)
-            ->whereExists(function ($query) use ($year) {
-                $query->select(DB::raw(1))
-                    ->from('cash_flows')
-                    ->whereColumn('cash_flows.account_id', 'accounts.id')
-                    ->whereYear('transaction_date', '<=', $year);
-            })
-            ->orderBy('code')
-            ->orderBy('accountName');
+            ->where('accounts.accountType', 'Equity')
+            ->where('accounts.team_id', $teamId)
+            ->orderBy('accounts.code')
+            ->orderBy('accounts.accountName');
     }
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     $year = request()->input('tableFilters.year.value', date('Y'));
+    //     $startDate = "{$year}-01-01";
+    //     $endDate = "{$year}-12-31";
+    //     $teamId = auth()->user()->teams()->first()?->id; // Menggunakan safe navigation operator untuk menghindari error jika tim tidak ada.
+
+    //     return Account::query()
+    //         ->select([
+    //             'accounts.id',
+    //             'accounts.code',
+    //             'accounts.accountName',
+    //             'accounts.accountType',
+    //             DB::raw("0 AS opening_balance"),
+    //             DB::raw("0 AS movement"),
+    //             DB::raw("0 AS closing_balance"),
+    //         ])
+    //         ->where('accounts.accountType', 'Equity')
+    //         ->where('accounts.team_id', $teamId)
+    //         ->orderBy('accounts.code')
+    //         ->orderBy('accounts.accountName');
+    // }
+
+
+
     protected static function calculateLabaRugi(): float
     {
         $year = request()->input('tableFilters.year.value', date('Y'));

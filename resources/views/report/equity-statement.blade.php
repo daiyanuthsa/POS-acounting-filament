@@ -22,24 +22,34 @@
             <!-- Table Report Section -->
             <div id="table-report" class="lg:w-1/2 w-full pt-10 lg:pt-20 text-sm space-y-2 lg:text-lg">
                 <!-- Modal Awal -->
-                <div class="flex justify-between font-bold mb-4">
-                    <h4>MODAL AWAL</h4>
-                    <p>{{ number_format($openningBalance, 2) }}</p>
-                </div>
+                <h4 class="font-bold">MODAL AWAL</h4>
+                <table class="w-full mb-4">
+                    <tbody>
+                        @foreach ($modal as $account)
+                            <tr>
+                                <td class="pl-5">{{ $account->account_code }}</td>
+                                <td>{{ $account->account_name }}</td>
+                                <td class="text-right">{{ number_format($account->balance, 2) }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
 
                 <!-- Perubahan Section -->
                 <h4 class="font-bold mb-2">PERUBAHAN</h4>
                 <table class="w-full mb-4">
                     <tbody>
                         @php
-                            $totalMovement = 0; 
+                            $totalMovement = 0;
                         @endphp
                         @foreach ($equityMovement as $account)
-                            <tr>
-                                <td class="pl-5">{{ $account->account_code }}</td>
-                                <td>{{ $account->account_name }}</td>
-                                <td class="text-right">{{ number_format($account->balance, 2) }}</td>
-                            </tr>
+                            @if ($account->account_code !== '3-110')
+                                <tr>
+                                    <td class="pl-5">{{ $account->account_code }}</td>
+                                    <td>{{ $account->account_name }}</td>
+                                    <td class="text-right">{{ number_format($account->balance, 2) }}</td>
+                                </tr>
+                            @endif
                             @php
                                 $totalMovement += $account->balance;
                             @endphp

@@ -20,7 +20,7 @@ class EquityStatementController extends Controller
             return redirect('/merchant')->with('error', 'Please login first.');
         }
 
-        
+
         $year = request('tableFilters.year.value') ?? date('Y');
 
         $merchant = Auth::user()->teams()->first();
@@ -29,6 +29,8 @@ class EquityStatementController extends Controller
             return redirect('/merchant');
         }
 
+        $modal = $this->getEquityBalances($year, 'Equity', $merchant->id, '3-110');
+
         $equityMovement = $this->getAccountBalances($year, 'Equity', $merchant->id);
         $openningBalance = $this->getTotalBalanceBeforeYear($year, 'Equity', $merchant->id);
         $revenueBeforeYear = $this->calculateRevenue($year, '<', $merchant->id);
@@ -36,20 +38,19 @@ class EquityStatementController extends Controller
 
         $profitPosition = $currentRevenue < 0 ? 'Rugi' : 'Laba';
 
-        // Assuming $newItem is the item you want to add
-        $newItem = [
-            'account_code' => ' ',
-            'account_name' => $profitPosition,
-            'balance' => $currentRevenue
-        ];
-
-        $equityMovement->push((object) $newItem); // Add $newItem as an object
+        $equityMovement->transform(function ($item) use ($currentRevenue) {
+            if ($item->account_code === '3-310') {
+                $item->balance = $currentRevenue;
+            }
+            return $item;
+        });
 
         $pdf = Pdf::loadView(
             'report.equity-statement',
             [
                 'year' => $year,
                 'merchant' => $merchant->name,
+                'modal' => $modal,
                 'equityMovement' => $equityMovement,
                 'openningBalance' => $openningBalance + $revenueBeforeYear,
             ]
@@ -93,6 +94,43 @@ class EquityStatementController extends Controller
 
         return $accounts;
     }
+
+    protected function getEquityBalances($year, $accountType, $team_id, $specificAccountCode = null)
+    {
+        $balanceExpression = $accountType === 'Revenue'
+            ? DB::raw("SUM(CASE WHEN cash_flows.type = 'debit' THEN cash_flows.amount ELSE 0 END) - SUM(CASE WHEN cash_flows.type = 'credit' THEN cash_flows.amount ELSE 0 END) as balance")
+            : DB::raw("SUM(CASE WHEN cash_flows.type = 'credit' THEN cash_flows.amount ELSE 0 END) - SUM(CASE WHEN cash_flows.type = 'debit' THEN cash_flows.amount ELSE 0 END) as balance");
+
+        // Query to get the accounts with the specified type and their balances for the given date range and team
+        $accounts = DB::table('accounts')
+            ->leftJoin('cash_flows', function ($join) use ($year, $team_id) {
+                $join->on('accounts.id', '=', 'cash_flows.account_id')
+                    ->where('cash_flows.team_id', '=', $team_id)
+                    ->whereYear('cash_flows.transaction_date', '<=', $year);
+            })
+            ->select(
+                'accounts.code as account_code',
+                'accounts.accountName as account_name',
+                $balanceExpression
+            )
+            ->where('accounts.team_id', $team_id)
+            ->where('accounts.accountType', $accountType) // Filter for accounts with type
+            ->groupBy('accounts.id', 'accounts.code', 'accounts.accountName')
+            ->when($specificAccountCode, function ($query) use ($specificAccountCode) {
+                $query->where('accounts.code', $specificAccountCode);
+            })
+            ->get();
+
+        // Apply the MoneyCast to balance for each account
+        $accounts->transform(function ($account) {
+            // Apply MoneyCast to the balance field
+            $account->balance = (new MoneyCast())->get(null, 'balance', $account->balance, []);
+            return $account;
+        });
+
+        return $accounts;
+    }
+
     protected function getTotalBalanceBeforeYear($year, $accountType, $team_id)
     {
         $balanceExpression = $accountType === 'Revenue'
