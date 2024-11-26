@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Perubahan Modal</title>
     <link rel="stylesheet" href="./css/report/profitloss.css">
-    @vite('resources/css/app.css')
 </head>
 
 <body class="p-8">

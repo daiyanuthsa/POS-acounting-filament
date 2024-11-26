@@ -2,6 +2,7 @@
 
 namespace App\Filament\Merchant\Resources;
 
+use App\Casts\MoneyCast;
 use App\Filament\Merchant\Resources\BalanceSheetResource\Pages;
 
 use App\Models\Account;
@@ -29,6 +30,23 @@ class BalanceSheetResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('accountType')
+                    ->label('Nama Akun')
+                    ->sortable()
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'Asset' => 'Aktiva',
+                            'Liability' => 'Pasiva',
+                            'Equity' => 'Pasiva',
+                            default => ucfirst($state),
+                        };
+                    })
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'Asset' => 'danger',
+                        'Liability' => 'success',
+                        'Equity' => 'success',
+                    }),
                 Tables\Columns\TextColumn::make('code')
                     ->label('Nama Akun')
                     ->sortable(),
@@ -38,28 +56,13 @@ class BalanceSheetResource extends Resource
                 Tables\Columns\TextColumn::make('calculated_balance')
                     ->label('Saldo')
                     ->money('IDR')
-
                     ->getStateUsing(function (Account $record) {
                         $calculated_balance = $record->calculated_balance;
-                        if ($record->accountName === 'Prive') {
+                        if ($record->code === '3-310') {
                             $calculated_balance += self::calculateRevenue();
-
                         }
                         return 'Rp ' . number_format($calculated_balance / 100, 2);
                     })
-                    ->summarize(
-                        Sum::make()
-                            ->label('Saldo Akun')
-                            ->formatStateUsing(function ($state) {
-                                $revenue = 0;
-                                $tab = request('activeTab', 'Aktiva');
-                                if ($tab === 'Pasiva') {
-                                    $revenue += self::calculateRevenue();
-                                }
-                                // Format total sum dengan format uang
-                                return 'Rp ' . number_format(($state + $revenue) / 100, 2);
-                            })
-                    ),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('year')
@@ -73,55 +76,65 @@ class BalanceSheetResource extends Resource
                     ->label('Tahun')
                     ->default(date('Y'))
                     ->query(function (Builder $query, array $data) {
-                        // Filter query untuk mengembalikan semua transaksi pada tahun yang dipilih dan sebelumnya
-                        if (isset($data['value'])) {
-                            $query->whereYear('cash_flows.transaction_date', '<=', $data['value']);
-                        }
+                        $year = $data['value'] ?? date('Y');
+
+                        // $query->where(function ($query) use ($year) {
+                        //     $query->whereYear('cash_flows.transaction_date', '<=', $year)
+                        //         ->orWhereNull('cash_flows.transaction_date');
+                        // });
+
                         return $query;
                     })->selectablePlaceholder(false),
             ], layout: FiltersLayout::AboveContent)
-
+            ->defaultGroup('accountType')
             ->header(function () {
                 return view('partials.reload-notification');
             })
-
             ->striped()
-            ->poll('10s');
+            ->poll('30s');
     }
 
     public static function getEloquentQuery(): Builder
     {
-        $year = request('tableFilters.year', date('Y')); // Ambil tahun dari filter atau gunakan tahun saat ini
-        $teamId = auth()->user()->teams()->first()->id; // Ambil ID tim dari pengguna yang sedang login
 
-        $query = parent::getEloquentQuery()
-            ->leftJoin('cash_flows', function ($join) use ($teamId) {
-                $join->on('accounts.id', '=', 'cash_flows.account_id')
-                    ->where('cash_flows.team_id', '=', $teamId); // Tetap hubungkan berdasarkan tim
-            })
-            ->select('accounts.*')
-            ->addSelect([
-                'calculated_balance' => DB::raw("
-                COALESCE(
-                    SUM(
-                        CASE
-                            WHEN YEAR(cash_flows.transaction_date) <= $year THEN 
-                                CASE
-                                    WHEN accounts.accountType IN ('Liability', 'Equity', 'Revenue') AND cash_flows.type = 'credit' THEN cash_flows.amount
-                                    WHEN accounts.accountType IN ('Asset', 'Expense') AND cash_flows.type = 'debit' THEN cash_flows.amount
-                                    ELSE 0
-                                END
-                            ELSE 0
-                        END
-                    ),
-                    0
-                ) AS calculated_balance
-            "),
-            ])
-            ->groupBy('accounts.id')
-            ->orderBy('accounts.code');
+        $year = request('tableFilters.year.value', date('Y'));
         
-        return $query;
+        $teamId = auth()->user()->teams()->first()->id;
+
+        return parent::getEloquentQuery()
+            ->leftJoin('cash_flows', function ($join) use ($teamId, $year) {
+                $join->on('accounts.id', '=', 'cash_flows.account_id')
+                    ->where('cash_flows.team_id', '=', $teamId)
+                    ->whereYear('cash_flows.transaction_date', '<=', $year);
+            })
+            ->select([
+                'accounts.id',
+                'accounts.code',
+                'accounts.accountName',
+                'accounts.accountType',
+                'accounts.asset_type',
+                DB::raw("
+                CASE 
+                    WHEN accounts.accountType = 'Asset' THEN 
+                        SUM(CASE WHEN cash_flows.type = 'debit' THEN cash_flows.amount ELSE 0 END) - 
+                        SUM(CASE WHEN cash_flows.type = 'credit' THEN cash_flows.amount ELSE 0 END)
+                    WHEN accounts.accountType IN ('Liability', 'Equity') THEN 
+                        SUM(CASE WHEN cash_flows.type = 'credit' THEN cash_flows.amount ELSE 0 END) - 
+                        SUM(CASE WHEN cash_flows.type = 'debit' THEN cash_flows.amount ELSE 0 END)
+                    ELSE 0
+                END as calculated_balance
+            ")
+            ])
+            ->where('accounts.team_id', $teamId)
+            ->whereIn('accounts.accountType', ['Asset', 'Liability', 'Equity'])
+            ->groupBy(
+                'accounts.id',
+                'accounts.code',
+                'accounts.accountName',
+                'accounts.accountType',
+                'accounts.asset_type'
+            )
+            ->orderBy('accounts.code');
     }
 
 

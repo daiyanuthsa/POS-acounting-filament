@@ -36,6 +36,9 @@ class BigBookResource extends Resource
                 Tables\Columns\TextColumn::make('account.accountName') // Assuming the relationship to account exists
                     ->label('Account')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('account.accountType') // Assuming the relationship to account exists
+                    ->label('Account')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('debit')
                     ->label('Debit Amount')
                     ->summarize(
@@ -50,6 +53,27 @@ class BigBookResource extends Resource
                         return 'IDR ' . number_format($state / 100, 2);
                     }))
                     ->money('IDR'),
+                // Tables\Columns\TextColumn::make('debit_balance')
+                //     ->label('Saldo Debit')
+                //     ->getStateUsing(fn($record) => in_array($record->account->accountType, ['Asset', 'Expense', 'UPC'])
+                //         ? max(0, ($record->debit ?? 0) - ($record->credit ?? 0))
+                //         : 0)
+                //     ->formatStateUsing(fn($state) => 'IDR ' . number_format($state / 100, 2))
+                //     ->money('IDR'),
+
+                // Tables\Columns\TextColumn::make('credit_balance')
+                //     ->label('Saldo Kredit')
+                //     ->getStateUsing(fn($record) => in_array($record->account->accountType, ['Liability', 'Equity', 'Revenue'])
+                //         ? max(0, ($record->credit ?? 0) - ($record->debit ?? 0))
+                //         : 0)
+                //     ->formatStateUsing(fn($state) => 'IDR ' . number_format($state / 100, 2))
+                //     ->money('IDR'),
+                Tables\Columns\TextColumn::make('total_balance')
+                    ->label('Total Balance')
+                    ->getStateUsing(fn($record) => max(0, ($record->debit ?? 0) - ($record->credit ?? 0)))
+                    ->formatStateUsing(fn($state) => 'IDR ' . number_format($state / 100, 2))
+                    ->money('IDR')
+
             ])
             ->filters([
                 Tables\Filters\Filter::make('transaction_month')

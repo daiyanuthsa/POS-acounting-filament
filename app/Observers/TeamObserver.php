@@ -119,6 +119,13 @@ class TeamObserver
                 'team_id' => $team->id,
                 'user_id' => $team->owner_id,
             ],
+            [
+                'code' => '3-310',
+                'accountName' => 'Laba/Rugi Berjalan',
+                'accountType' => 'Equity',
+                'team_id' => $team->id,
+                'user_id' => $team->owner_id,
+            ],
             // Beban
             [
                 'code' => '6-110',
