@@ -45,22 +45,7 @@ class BigBookResource extends Resource
                 Tables\Columns\TextColumn::make('credit')
                     ->label('Credit Amount')
                     ->money('IDR'),
-                // Tables\Columns\TextColumn::make('debit_balance')
-                //     ->label('Saldo Debit')
-                //     ->getStateUsing(fn($record) => in_array($record->account->accountType, ['Asset', 'Expense', 'UPC'])
-                //         ? max(0, ($record->debit ?? 0) - ($record->credit ?? 0))
-                //         : 0)
-                //     ->formatStateUsing(fn($state) => 'IDR ' . number_format($state / 100, 2))
-                //     ->money('IDR'),
-
-                // Tables\Columns\TextColumn::make('credit_balance')
-                //     ->label('Saldo Kredit')
-                //     ->getStateUsing(fn($record) => in_array($record->account->accountType, ['Liability', 'Equity', 'Revenue'])
-                //         ? max(0, ($record->credit ?? 0) - ($record->debit ?? 0))
-                //         : 0)
-                //     ->formatStateUsing(fn($state) => 'IDR ' . number_format($state / 100, 2))
-                //     ->money('IDR'),
-                Tables\Columns\TextColumn::make('total_balance')
+                Tables\Columns\TextColumn::make('running_balance')
                     ->label('Total Balance')
                     ->money('IDR')
 
