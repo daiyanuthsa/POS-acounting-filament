@@ -3,9 +3,10 @@ import Nav from './HomeComponents/Nav'
 import Footer from './HomeComponents/Footer'
 import Hero from './HomeComponents/Hero'
 import Profile from './HomeComponents/Profile'
-import Wisata from './HomeComponents/Wisata'
 import FAQ from './HomeComponents/FAQ'
 import ProdukUMKM from './HomeComponents/ProdukUMKM'
+import Fitur from './HomeComponents/Fitur'
+import Closing from './HomeComponents/Closing'
 
 const Home = () => {
     return (
@@ -13,9 +14,10 @@ const Home = () => {
             <Nav />
             <Hero />
             <Profile />
-            <Wisata />
-            <ProdukUMKM/>
+            <Fitur />
+            <ProdukUMKM />
             <FAQ />
+            <Closing />
             <Footer />
         </section>
     )
