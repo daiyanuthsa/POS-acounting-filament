@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Report;
 use App\Casts\MoneyCast;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use App\Models\LabaRugi;
 use Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DB;
@@ -32,8 +33,14 @@ class BalanceSheet extends Controller
 
         // Get the balance sheet data for the given year and merchant's team
         $balanceSheetData = $this->getAccountBalances($year, $merchant->id);
-
+        $additionalBalance= $this->calculateRevenue($year, $merchant->id);
         $pasiva = $this->getLiabilityAndEquityBalances($year, $merchant->id);
+
+        foreach ($pasiva as $item) {
+            if ($item->account_name === "Laba berjalan") {
+                $item->balance += $additionalBalance;
+            }
+        }
 
         // Generate the PDF with the balance sheet data
         $pdf = PDF::loadView('report.balance-sheet', [
@@ -105,6 +112,24 @@ class BalanceSheet extends Controller
         });
 
         return $accounts;
+    }
+
+    protected static function calculateRevenue($year, $teamId): float
+    {
+        $totals = LabaRugi::query()
+            ->where('team_id', $teamId)
+            ->select('type')
+            ->selectRaw('SUM(debit - credit) as total')
+            ->whereYear('transaction_date', '<=', $year)
+            ->groupBy('type')
+            ->pluck('total', 'type')
+            ->toArray();
+
+        $pendapatan = abs($totals['Revenue'] ?? 0);
+        $pengeluaran = abs($totals['Expense'] ?? 0);
+        $hpp = abs($totals['UPC'] ?? 0);
+
+        return ($pendapatan - $pengeluaran - $hpp)/100;
     }
 
 

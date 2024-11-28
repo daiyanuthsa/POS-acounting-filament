@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neraca Bengkel Bang Jo</title>
     <link rel="stylesheet" href="./css/report/equitystatement.css">
-    @vite('resources/css/app.css')
 </head>
 
 <body class="p-8">
@@ -56,18 +55,29 @@
                         @endforeach
                     </tbody>
                 </table>
-
                 <!-- Total Perubahan Modal -->
-                <div class="flex justify-between font-bold mb-4">
-                    <h4>TOTAL PERUBAHAN MODAL</h4>
-                    <p>{{ number_format($totalMovement, 2) }}</p>
-                </div>
+                <table class="w-full" id="table-end">
+                    <tbody>
+                        <tr class="account-end">
+                            <td class="pl-5">
+                                TOTAL PERUBAHAN MODAL
+                            </td>
+                            <td class="text-right">{{ number_format($totalMovement, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <!-- Modal Akhir -->
-                <div class="flex justify-between font-bold">
-                    <h4>MODAL AKHIR</h4>
-                    <p>{{ number_format($openningBalance + $totalMovement, 2) }}</p>
-                </div>
+                <table class="w-full" id="table-end">
+                    <tbody>
+                        <tr class="account-end">
+                            <td class="pl-5">
+                                MODAL AKHIR
+                            </td>
+                            <td class="text-right">{{ number_format($openningBalance + $totalMovement, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>

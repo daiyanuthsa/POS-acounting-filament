@@ -22,6 +22,7 @@ class ProfitLossController extends Controller
             ?? date('Y-m-d', strtotime('-1 week'));
 
         $endDate = request('tableFilters.to_date.to_date') ?? date('Y-m-d');
+
         $merchant = Auth::user()->teams()->first();
         if (!$merchant) {
             // Redirect to a specific path if no team is associated
@@ -46,13 +47,8 @@ class ProfitLossController extends Controller
         $formatedEndDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('d-m-Y');
 
         // Return the PDF as a stream (download in the browser)
-        return $pdf->stream('Laporan Posisi Keuangan ' . $merchant->name . '_' . $formatedStartDate . '-' . $formatedEndDate . '.pdf');
+        return $pdf->stream('Laporan Laba Rugi ' . $merchant->name . '_' . $formatedStartDate . '-' . $formatedEndDate . '.pdf');
 
-        // $pdf = Pdf::loadView('welcome')
-        //     ->setPaper('a4', 'potrait');
-
-        // // Return the PDF as a stream (download in the browser)
-        // return $pdf->stream('Laporan Posisi Keuangan ' . '.pdf');
     }
 
     protected function getAccountBalances($startDate, $endDate, $accountType, $team_id)

@@ -37,6 +37,7 @@ class MerchantPanelProvider extends PanelProvider
             ->login()
             ->registration(MerchantRegistration::class)
             ->emailVerification()
+            ->passwordReset()
             ->profile()
             ->colors([
                 'primary' => Color::Amber,

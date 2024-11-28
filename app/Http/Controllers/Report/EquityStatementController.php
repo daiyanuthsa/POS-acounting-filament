@@ -58,7 +58,7 @@ class EquityStatementController extends Controller
 
 
         // Return the PDF as a stream (download in the browser)
-        return $pdf->stream('Laporan Posisi Keuangan ' . $merchant->name . '_' . $year . '.pdf');
+        return $pdf->stream('Laporan Perubahan Modal ' . $merchant->name . '_' . $year . '.pdf');
 
     }
 

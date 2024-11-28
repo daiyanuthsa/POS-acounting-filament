@@ -64,6 +64,18 @@ body {
     text-align: right;
     width: 150px;
 }
+.account-row {
+    border-bottom: 1px solid #ddd;
+}
+
+.account-row td {
+    padding: 6px 10px;
+    text-align: left;
+}
+
+.account-row td.text-right {
+    text-align: right;
+}
 
 table {
     width: 100%;
@@ -72,25 +84,26 @@ table {
 }
 
 table td {
-    padding: 8px 12px;
-    text-align: left;
-    font-size: 16px;
-}
-
-.account-row .account-code,
-.account-row .account-name {
+    padding: 6px 10px;
     text-align: left;
 }
 
-.account-row .nilai {
+table td.text-center {
+    text-align: center;
+}
+
+table td.text-right {
     text-align: right;
+}
+#table-end .account-end {
+    font-weight: bold;
 }
 
 h4,
 h5 {
     margin: 10px 0;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
 }
 .mb-1 {
     margin-bottom: 0.25rem; /* 4px */
