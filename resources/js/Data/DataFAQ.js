@@ -11,6 +11,10 @@ const DataFAQ = [
         question: "Apakah ada akomodasi di Manggarai Timur?",
         answer: "Ya, di Manggarai Timur tersedia berbagai pilihan akomodasi untuk memenuhi kebutuhan Anda, mulai dari hotel bintang, penginapan, hingga homestay. Beberapa daerah yang memiliki banyak pilihan akomodasi antara lain Borong, Ruteng, dan Labuan Bajo.",
     },
+    {
+        question: "Apakah ada panduan wisata untuk Manggarai Timur?",
+        answer: "Ya, Manggarai Timur menawarkan berbagai destinasi wisata, seperti Situs Megalitikum Wae Sambi dan Benteng Ranu, yang kaya akan sejarah dan budaya. Festival budaya, seperti di Pantai Ligota, turut memperkenalkan seni lokal dan produk ekonomi kreatif."
+    }
 ];
 
 export default DataFAQ;
