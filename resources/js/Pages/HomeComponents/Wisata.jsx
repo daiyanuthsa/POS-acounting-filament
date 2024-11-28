@@ -12,19 +12,15 @@ const Wisata = () => {
                     transition={{ duration: 0.5, ease: "easeOut" }}
                     className='text-cust-yellow font-bold text-2xl text-center md:text-start lg:text-4xl'
                 >
-                    Tempat <span className='text-black'>Wisata</span>
+                    Fitur <span className='text-black'>Unggulan</span>
                 </motion.h1>
 
                 <p className='mt-8 hidden md:block'>
-                    Ayo, kunjungi Kabupaten Manggarai Timur dan rasakan sendiri kekayaan alam dan <br />
-                    budaya yang tak terlupakan! Bersiaplah untuk menciptakan kenangan indah yang  <br />
-                    akan selalu terpatri dalam ingatanmu.
+                    Di Kabupaten Manggarai Barat, UMKM lokal terus berkembang, menghadirkan produk-produk unggulan yang dibuat dengan tangan terampil dan penuh dedikasi. Mulai dari kerajinan tangan hingga kuliner khas, semua tersedia untuk mendukung perekonomian daerah dan melestarikan budaya setempat. Berikut adalah fitur unggulan yang kami tawarkan
                 </p>
 
                 <p className='mt-8 md:hidden text-center'>
-                    Ayo, kunjungi Kabupaten Manggarai Timur dan rasakan sendiri kekayaan alam dan
-                    budaya yang tak terlupakan! Bersiaplah untuk menciptakan kenangan indah yang
-                    akan selalu terpatri dalam ingatanmu.
+                    Di Kabupaten Manggarai Barat, UMKM lokal terus berkembang, menghadirkan produk-produk unggulan yang dibuat dengan tangan terampil dan penuh dedikasi. Mulai dari kerajinan tangan hingga kuliner khas, semua tersedia untuk mendukung perekonomian daerah dan melestarikan budaya setempat. Berikut adalah fitur unggulan yang kami tawarkan
                 </p>
 
                 <div className='flex flex-col md:flex-row gap-10 px-5 xl:px-0 items-center md:justify-between mt-14 lg:mt-32'>
