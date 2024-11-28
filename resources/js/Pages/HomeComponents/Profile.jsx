@@ -16,7 +16,7 @@ const Profile = () => {
                 </motion.h1>
 
                 <div className='flex flex-col xl:flex-row gap-12 lg:gap-24 mt-14 lg:mt-[121px] items-center xl:items-start'>
-                    <img src="./images/home/ProfilHero.webp" alt="image" className='w-[350px] lg:w-[500px]' />
+                    <img src="./images/home/profil_hero.webp" alt="image" className='w-[350px] lg:w-[500px]' />
                     <div id='text' className='text-justify'>
                         <p className='text-lg lg:text-2xl'>UMKM Bajo adalah platform yang dirancang untuk membantu pelaku UMKM di Kabupaten Manggarai Barat mencatat dan mengelola keuangan mereka dengan mudah. Tidak ada lagi pembukuan manual yang rumit dengan UMKM Bajo, semua bisa Anda kelola dalam satu platform.</p>
                     </div>

@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
     const images = [
-        './images/home/HeroImage1.webp',
-        './images/home/HeroImage2.webp',
+        './images/home/hero_image3.webp',
+        './images/home/hero_image1.webp',
+        './images/home/hero_image2.webp',
     ];
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -56,7 +57,7 @@ const Hero = () => {
             </div>
             <div className='absolute bottom-0 left-0 w-full'>
                 <img
-                    src='./images/home/patternHero.webp'
+                    src='./images/home/pattern_hero.webp'
                     alt="pattern"
                     className='w-full h-auto'
                 />
