@@ -4,44 +4,49 @@ import DataProduk from '../../Data/DataProduk';
 
 const ProdukUMKM = () => {
     return (
-        <section className='lg:px-24 px-10 font-montserrat my-24'>
-            <div>
+        <section className='lg:px-40 px-10 font-montserrat my-24'>
+            <div className='flex flex-col items-center'>
                 <motion.h1
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
-                    className='text-cust-yellow text-center md:text-start font-bold text-2xl lg:text-4xl'
+                    className='text-center md:text-start font-bold text-2xl lg:text-4xl'
                 >
-                    Kenali Produk Lokal Manggarai Timur yang Berkualitas!
+                    Untuk Siapa <span className='text-cust-yellow'> UMKM Bajo</span>
                 </motion.h1>
 
-                <p className='mt-8 hidden md:block'>
-                    Di Kabupaten Manggarai Timur, UMKM lokal terus berkembang, menghadirkan produk-produk unggulan yang dibuat <br /> dengan tangan terampil dan penuh dedikasi. Mulai dari kerajinan tangan hingga kuliner khas, semua <br /> tersedia untuk mendukung perekonomian daerah dan melestarikan budaya setempat.
+                <p className='mt-8 text-center'>
+                    UMKM Bajo dirancang untuk semua pelaku usaha mikro, kecil, dan menengah, termasuk:
                 </p>
 
-                <p className='mt-8 md:hidden text-center'>
-                    Di Kabupaten Manggarai Timur, UMKM lokal terus berkembang, menghadirkan produk-produk unggulan yang dibuat <br /> dengan tangan terampil dan penuh dedikasi. Mulai dari kerajinan tangan hingga kuliner khas, semua <br /> tersedia untuk mendukung perekonomian daerah dan melestarikan budaya setempat.
-                </p>
-                <div className='flex flex-col md:flex-row gap-10 px-5 xl:px-0 items-center md:justify-between mt-14 lg:mt-32'>
-                    {DataProduk.map((dataproduk, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.2, ease: "easeOut" }}
-                            className=''
-                        >
-                            <img src={dataproduk.img} alt="image" className='w-72 md:w-full h-[200px] md:h-40 lg:h-[306px] xl:h-[366px] rounded-t-2xl' />
-                            <div id='produk' className='bg-cust-yellow w-72 md:w-full flex flex-col items-center gap-2 p-5 lg:p-6 xl:p-8 rounded-b-2xl h-60 lg:h-80'>
-                                <h1 className='font-dmsans text-lg lg:text-xl xl:text-2xl text-center'>{dataproduk.title}</h1>
-                                <p className='font-plusJakarta font-light text-[10px] lg:text-sm text-center lg:text-start'>{dataproduk.description}</p>
-                            </div>
-                        </motion.div>
-                    ))}
+                <div className='flex justify-center'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-10 px-5 xl:px-0 mt-14 lg:mt-20'>
+                        {DataProduk.map((dataproduk, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 50 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.2, ease: "easeOut" }}
+                                className='relative w-72 md:w-full'
+                            >
+                                <img
+                                    src={dataproduk.img}
+                                    alt="image"
+                                    className='w-64 md:w-full h-60 lg:h-[250px] rounded-2xl object-cover'
+                                />
+
+                                <div className='absolute bottom-0 left-0 w-64 md:w-full bg-cust-yellow bg-opacity-80 rounded-b-2xl py-3'>
+                                    <h1 className='text-black font-dmsans font-medium text-center text-sm'>
+                                        {dataproduk.title}
+                                    </h1>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>
     )
 }
 
-export default ProdukUMKM
+export default ProdukUMKM;

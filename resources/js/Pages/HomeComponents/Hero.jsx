@@ -43,7 +43,7 @@ const Hero = () => {
                     transition={{ duration: 0.5, ease: "easeOut" }}
                     className='font-medium text-2xl lg:text-5xl tracking-wide text-center md:text-start text-white md:w-3/4 xl:w-1/2'
                 >
-                    Potensi Serta Kekayaan alam Kabupaten Manggarai Timur
+                    UMKM Bajo: Cerdas Kelola Keuangan, Mudah Kembangkan Usaha
                 </motion.h1>
                 <motion.p
                     initial={{ opacity: 0, y: 50 }}
@@ -51,7 +51,7 @@ const Hero = () => {
                     transition={{ duration: 0.5, ease: "easeOut", delay: 0.3 }}
                     className='text-md lg:pb-10 lg:text-lg md:tracking-wide font-light text-cust-yellow2 text-center md:text-justify md:w-3/4 xl:w-1/2'
                 >
-                    Selamat datang di Kabupaten Manggarai Timur, surga tersembunyi di Nusa Tenggara Timur! Dikenal dengan kekayaan alam yang menakjubkan, daerah ini menyuguhkan pemandangan yang memukau dan keanekaragaman hayati yang luar biasa.
+                    Kelola uang usaha Anda lebih efisien dengan fitur pencatatan keuangan digital yang dirancang khusus untuk pelaku UMKM.
                 </motion.p>
             </div>
             <div className='absolute bottom-0 left-0 w-full'>
