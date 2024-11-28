@@ -24,6 +24,7 @@ class BigBook extends Model
     protected $casts = [
         'debit' => MoneyCast::class,
         'credit' => MoneyCast::class,
+        'running_balance' => MoneyCast::class,
     ];
 
     public function team(): BelongsTo

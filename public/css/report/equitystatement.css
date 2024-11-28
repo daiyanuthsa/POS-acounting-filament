@@ -61,7 +61,7 @@ body {
 
 table {
     width: 100%;
-    margin: 10px 0;
+    margin: 10px 0px;
     border-collapse: collapse;
 }
 
@@ -77,7 +77,9 @@ table td.text-center {
 table td.text-right {
     text-align: right;
 }
-
+#table-end .account-end {
+    font-weight: bold;
+}
 h4 {
     font-weight: 600;
 }

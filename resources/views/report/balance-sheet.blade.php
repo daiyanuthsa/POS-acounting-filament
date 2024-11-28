@@ -26,19 +26,17 @@
             <!-- Aktiva Section -->
             <div id="aktiva" class="mb-4">
                 <h3>AKTIVA</h3>
-                <h4>Aktiva Lancar</h4>
-                <table>
+                <h4>AKTIVA LANCAR</h4>
+                <table class="w-full">
                     <tbody>
                         @php
                             $totalcurrentAssets = 0;
                         @endphp
-
                         @foreach ($balanceSheetData as $account)
                             @if ($account->asset_type === 'current')
                                 <tr class="account-row">
-                                    <td class="account-code">{{ $account->account_code }}</td>
-                                    <td class="account-name">{{ $account->account_name }}</td>
-                                    <td class="nilai">{{ number_format($account->balance, 2) }}</td>
+                                    <td class="pl-5">{{ $account->account_code }} {{ $account->account_name }}</td>
+                                    <td class="text-right">{{ number_format($account->balance, 2) }}</td>
                                 </tr>
                                 @php
                                     $totalcurrentAssets += $account->balance;
@@ -47,24 +45,26 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="single-content">
-                    <span class="deskripsi">Total Aktiva Lancar</span>
-                    <span class="nilai">{{ number_format($totalcurrentAssets, 2) }}</span>
-                </div>
+                <table class="w-full" id="table-end">
+                    <tbody>
+                        <tr class="account-end">
+                            <td class="pl-5">TOTAL AKTIVA LANCAR</td>
+                            <td class="text-right">{{ number_format($totalcurrentAssets, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <h4>Aktiva Tetap</h4>
-                <table>
+                <h4>AKTIVA TETAP</h4>
+                <table class="w-full">
                     <tbody>
                         @php
                             $totalFixedAssets = 0;
                         @endphp
-
                         @foreach ($balanceSheetData as $account)
                             @if ($account->asset_type === 'fixed')
                                 <tr class="account-row">
-                                    <td class="account-code">{{ $account->account_code }}</td>
-                                    <td class="account-name">{{ $account->account_name }}</td>
-                                    <td class="nilai">{{ number_format($account->balance, 2) }}</td>
+                                    <td class="pl-5">{{ $account->account_code }} {{ $account->account_name }}</td>
+                                    <td class="text-right">{{ number_format($account->balance, 2) }}</td>
                                 </tr>
                                 @php
                                     $totalFixedAssets += $account->balance;
@@ -73,33 +73,38 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="single-content">
-                    <span class="deskripsi">Total Aktiva Tetap</span>
-                    <span class="nilai">{{ number_format($totalFixedAssets, 2) }}</span>
-                </div>
-
-                <div class="single-content">
-                    <span class="deskripsi">Total Aktiva</span>
-                    <span class="nilai">{{ number_format($totalFixedAssets + $totalcurrentAssets, 2) }}</span>
-                </div>
+                <table class="w-full" id="table-end">
+                    <tbody>
+                        <tr class="account-end">
+                            <td class="pl-5">TOTAL AKTIVA TETAP</td>
+                            <td class="text-right">{{ number_format($totalFixedAssets, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="w-full" id="table-end">
+                    <tbody>
+                        <tr class="account-end">
+                            <td class="pl-5">TOTAL AKTIVA</td>
+                            <td class="text-right">{{ number_format($totalFixedAssets + $totalcurrentAssets, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!-- Pasiva Section -->
             <div id="pasiva">
                 <h3 class="mt-4">PASIVA</h3>
                 <h4>Hutang Lancar</h4>
-                <table>
+                <table class="w-full">
                     <tbody>
                         @php
                             $liability = 0;
                         @endphp
-
                         @foreach ($pasiva as $account)
                             @if ($account->accountType === 'Liability')
                                 <tr class="account-row">
-                                    <td class="account-code">{{ $account->account_code }}</td>
-                                    <td class="account-name">{{ $account->account_name }}</td>
-                                    <td class="nilai">{{ number_format($account->balance, 2) }}</td>
+                                    <td class="pl-5">{{ $account->account_code }} {{ $account->account_name }}</td>
+                                    <td class="text-right">{{ number_format($account->balance, 2) }}</td>
                                 </tr>
                                 @php
                                     $liability += $account->balance;
@@ -108,24 +113,27 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="single-content">
-                    <span class="deskripsi">Total Hutang Lancar</span>
-                    <span class="nilai">{{ number_format($liability, 2) }}</span>
-                </div>
+                <table class="w-full" id="table-end">
+                    <tbody>
+                        <tr class="account-end">
+                            <td class="pl-5">TOTAL HUTANG LANCAR</td>
+                            <td class="text-right">{{ number_format($liability, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
+                <!-- EQUITY -->
                 <h4>Modal</h4>
-                <table>
+                <table class="w-full">
                     <tbody>
                         @php
                             $equity = 0;
                         @endphp
-
                         @foreach ($pasiva as $account)
                             @if ($account->accountType === 'Equity')
                                 <tr class="account-row">
-                                    <td class="account-code">{{ $account->account_code }}</td>
-                                    <td class="account-name">{{ $account->account_name }}</td>
-                                    <td class="nilai">{{ number_format($account->balance, 2) }}</td>
+                                    <td class="pl-5">{{ $account->account_code }} {{ $account->account_name }}</td>
+                                    <td class="text-right">{{ number_format($account->balance, 2) }}</td>
                                 </tr>
                                 @php
                                     $equity += $account->balance;
@@ -134,10 +142,22 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div class="single-content">
-                    <span class="deskripsi">Total Pasiva</span>
-                    <span class="nilai">{{ number_format($equity, 2) }}</span>
-                </div>
+                <table class="w-full" id="table-end">
+                    <tbody>
+                        <tr class="account-end">
+                            <td class="pl-5">TOTAL MODAL</td>
+                            <td class="text-right">{{ number_format($equity, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="w-full" id="table-end">
+                    <tbody>
+                        <tr class="account-end">
+                            <td class="pl-5">TOTAL PASIVA</td>
+                            <td class="text-right">{{ number_format($equity + $liability, 2) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
