@@ -1,11 +1,19 @@
 import React from 'react';
+import { motion } from "framer-motion";
 
 const Closing = () => {
     return (
-        <section className='lg:px-40 px-10 font-dmsans my-24'>
+        <section className='lg:px-40 px-10 font-montserrat my-24'>
             <div className='flex flex-col'>
-                <h1 className='font-semibold text-2xl lg:text-4xl text-center'>"Mulai Kelola Keuangan dengan Lebih Mudah!"</h1>
-                <p className='text-lg lg:text-2xl text-center lg:text-justify mt-8'>
+                <motion.h1
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className='font-semibold text-2xl lg:text-4xl text-center'
+                >
+                    "Mulai Kelola Keuangan dengan Lebih Mudah!"
+                </motion.h1>
+                <p className='text-lg lg:text-xl text-center lg:text-justify mt-8'>
                     Bergabunglah dengan UMKM Bajo sekarang dan nikmati pencatatan keuangan yang simpel dan efisien. Klik
                     <span
                         onClick={() => window.location.assign("/merchant/login")}
