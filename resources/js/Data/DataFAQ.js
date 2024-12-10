@@ -1,20 +1,24 @@
 const DataFAQ = [
     {
-        question: "Di mana letak Kabupaten Manggarai Timur?",
-        answer: "Kabupaten Manggarai Timur terletak di provinsi Nusa Tenggara Timur, Indonesia, dengan ibu kota di Borong. Wilayah ini memiliki keindahan alam yang khas, terutama lanskap perbukitan, sawah terasering, dan pesisir pantai.",
+        question: "Apa itu aplikasi UMKM Bajo",
+        answer: "Aplikasi UMKM Bajo adalah platform berbasis website yang dirancang khusus untuk membantu pelaku usaha mikro, kecil, dan menengah (UMKM) dalam mencatat dan mengelola keuangan mereka. Aplikasi ini dikembangkan oleh Fakultas Ekonomi dan Bisnis Universitas Brawijaya (FEB UB) dan diberikan kepada Kabupaten Manggarai Barat sebagai bagian dari kegiatan pengabdian kepada masyarakat.",
     },
     {
-        question: "Kapan waktu terbaik untuk berkunjung ke Manggarai Timur?",
-        answer: "Waktu terbaik mengunjungi Manggarai Timur adalah saat musim kemarau (April–Oktober), dengan cuaca cerah yang mendukung eksplorasi alam. Namun, musim hujan (November–Maret) menghadirkan pemandangan hijau subur dan air terjun yang memukau. Jika bertepatan dengan pesta adat, Anda juga bisa menikmati tarian tradisional, musik gamelan, dan kuliner khas yang memperkaya pengalaman budaya Anda.",
+        question:"Bagaimana cara mengakses laporan keuangan yang sudah saya buat?",
+        answer: 'Setelah Anda mencatat transaksi keuangan di aplikasi, Anda dapat mengakses laporan keuangan kapan saja melalui menu "Laporan Keuangan". Laporan ini dapat diunduh dalam format yang mudah dibaca dan digunakan untuk analisis keuangan usaha Anda.',
     },
     {
-        question: "Apakah ada akomodasi di Manggarai Timur?",
-        answer: "Ya, di Manggarai Timur tersedia berbagai pilihan akomodasi untuk memenuhi kebutuhan Anda, mulai dari hotel bintang, penginapan, hingga homestay. Beberapa daerah yang memiliki banyak pilihan akomodasi antara lain Borong, Ruteng, dan Labuan Bajo.",
+        question: "Apakah aplikasi ini hanya untuk UMKM di Kabupaten Manggarai Barat?",
+        answer: "Saat ini, aplikasi UMKM BAjo khusus disediakan untuk pelaku UMKM di Kabupaten Manggarai Barat sebagai bagian dari program pengabdian masyarakat. Namun, kami berharap dapat memperluas jangkauan penggunaan aplikasi ini ke daerah lain di masa depan.",
     },
     {
-        question: "Apakah ada panduan wisata untuk Manggarai Timur?",
-        answer: "Ya, Manggarai Timur menawarkan berbagai destinasi wisata, seperti Situs Megalitikum Wae Sambi dan Benteng Ranu, yang kaya akan sejarah dan budaya. Festival budaya, seperti di Pantai Ligota, turut memperkenalkan seni lokal dan produk ekonomi kreatif."
-    }
+        question: "Apakah aplikasi UMKM BAJO dapat digunakan di perangkat selain komputer ?",
+        answer: "Aplikasi UMKM Bajo berbasis website, sehingga dapat diakses melalui perangkat yang memiliki koneksi internet, baik itu di komputer, laptop, atau perangkat mobile seperti ponsel dan tablet",
+    },
+    {
+        question: "Apakah aplikasi ini gratis?",
+        answer: "Ya, aplikasi UMKM Bajo disediakan secara gratis untuk seluruh pelaku UMKM di Kabupaten Manggarai Barat sebagai bagian dari pengabdian masyarakat oleh FEB UB.",
+    },
 ];
 
 export default DataFAQ;
