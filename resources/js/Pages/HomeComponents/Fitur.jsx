@@ -20,7 +20,7 @@ const Fitur = () => {
                 </p>
 
                 <div className='flex justify-center'>
-                    <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 px-5 xl:px-0 mt-14 lg:mt-20 items-center'>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 px-5 xl:px-0 mt-14 lg:mt-20 items-center'>
                         {DataFitur.map((datafitur, index) => (
                             <motion.div
                                 key={index}
@@ -29,8 +29,8 @@ const Fitur = () => {
                                 transition={{ duration: 0.5, delay: index * 0.2, ease: "easeOut" }}
                                 className=''
                             >
-                                <img src={datafitur.img} alt="image" className='w-64 md:w-full h-[200px] md:h-40 lg:h-[306px] rounded-t-2xl' />
-                                <div className='bg-cust-yellow w-64 md:w-full items-center space-y-2 lg:space-y-3 p-5 lg:p-8 rounded-b-2xl h-60'>
+                                <img src={datafitur.img} alt="image" className='w-64 sm:w-full md:w-72 lg:w-96 xl:w-full 2xl:max-w-96 h-[200px] md:h-48 lg:h-[306px] rounded-t-2xl' />
+                                <div className='bg-cust-yellow w-64 sm:w-full md:w-72 lg:w-96 xl:w-full 2xl:max-w-96 items-center space-y-2 lg:space-y-3 p-5 lg:p-8 rounded-b-2xl h-60'>
                                     <h1 className='font-dmsans text-lg lg:text-xl xl:text-2xl text-center'>{datafitur.title}</h1>
                                     <p className='font-plusJakarta font-light text-xs lg:text-sm text-center lg:text-start'>{datafitur.description}</p>
                                 </div>
