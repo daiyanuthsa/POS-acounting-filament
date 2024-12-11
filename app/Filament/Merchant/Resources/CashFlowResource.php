@@ -10,6 +10,7 @@ use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,7 +55,8 @@ class CashFlowResource extends Resource
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->prefix('IDR')
-                    ->numeric(),
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(','),
                 Forms\Components\Select::make('type')
                     ->required()
                     ->options([

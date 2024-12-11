@@ -10,6 +10,7 @@ use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Notifications\Notification;
@@ -93,7 +94,8 @@ class OrderResource extends Resource
 
                         Forms\Components\TextInput::make('price')
                             ->label('Harga')
-                            ->numeric()
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
                             ->disabled() // Harga satuan tidak bisa diubah manual oleh user
                             ->dehydrated(false) // Tidak akan disimpan ke database
                             ->reactive(),
@@ -145,7 +147,8 @@ class OrderResource extends Resource
                         Forms\Components\TextInput::make('total')
                             ->label('Sub Total')
                             ->prefix('Rp')
-                            ->numeric()
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
                             ->disabled()
                             ->dehydrated(false)
                             ->reactive()
@@ -181,7 +184,8 @@ class OrderResource extends Resource
                 Forms\Components\TextInput::make('payment_amount')
                     ->prefix('IDR')
                     ->required()
-                    ->numeric(),
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(','),
             ]);
     }
 

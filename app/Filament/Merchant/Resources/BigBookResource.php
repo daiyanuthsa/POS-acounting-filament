@@ -30,7 +30,12 @@ class BigBookResource extends Resource
     {
         return $table
             ->defaultGroup('account.accountName')
+            ->defaultSort('transaction_date', 'asc')
             ->columns([
+                Tables\Columns\TextColumn::make('transaction_date') // Relationship to account
+                    ->label('Tanggal')
+                    ->date()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('account.code') // Relationship to account
                     ->label('Kode')
                     ->searchable(),
