@@ -15,6 +15,7 @@ class Order extends Model
         'payment_amount',
         'is_record',
         'created_at',
+        'transaction_id',
     ];
     protected $casts = [
         'payment_amount' => MoneyCast::class,
@@ -33,13 +34,13 @@ class Order extends Model
 
     public function products()
     {
-        
+
         return $this->hasMany(ProductOrder::class, 'order_id');
     }
     public function productOrder()
     {
-    return $this->belongsToMany(Product::class, 'product_orders', 'order_id', 'product_id')
-        ->withPivot('qty');
+        return $this->belongsToMany(Product::class, 'product_orders', 'order_id', 'product_id')
+            ->withPivot('qty');
     }
 
     /**
@@ -59,5 +60,30 @@ class Order extends Model
                 $model->team_id = auth()->user()->currentTeam->id;
             }
         });
+        static::creating(function ($model) {
+            // Generate custom transaction ID
+            $model->transaction_id = $model->generateTransactionId();
+        });
+    }
+
+    public function generateTransactionId(): string
+    {
+        $tenant = auth()->user()->teams()->first(); // ID tenant dari model
+
+        // Format: TX-TENANT-{tenant_id}-20241211-00001
+        $date = now()->format('Ymd'); // Format tanggal
+
+        // Cari jumlah transaksi yang sudah ada berdasarkan team_id dan tanggal saat ini
+        $transactionCount = self::where('team_id', $tenant->id)
+            ->whereDate('created_at', now()->toDateString())
+            ->count();
+
+        // Sequence urut untuk setiap tenant
+        $sequence = $transactionCount + 1;
+
+        // Format sequence menjadi 5 digit
+        $sequenceFormatted = str_pad($sequence, 5, '0', STR_PAD_LEFT);
+
+        return "TX-{$tenant->id}-{$date}-{$sequenceFormatted}";
     }
 }

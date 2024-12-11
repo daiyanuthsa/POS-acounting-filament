@@ -10,6 +10,7 @@ use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,7 +29,7 @@ class StockResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            
+
             ->schema([
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'name', function ($query) {
@@ -39,6 +40,7 @@ class StockResource extends Resource
                     ->searchable()  // Tambahkan fitur pencarian
                     ->preload(),
                 Forms\Components\Select::make('type')
+                    ->label('Status Stok')
                     ->required()
                     ->default('in')
                     ->options([
@@ -69,6 +71,8 @@ class StockResource extends Resource
                 Forms\Components\TextInput::make('total')
                     ->required()
                     ->numeric()
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->prefix('Rp')
                     ->reactive()
                     ->afterStateUpdated(function ($set, $get) {
@@ -88,7 +92,10 @@ class StockResource extends Resource
                     }),
 
                 Forms\Components\TextInput::make('unit_cost')
+                    ->label('Harga Per Produk')
                     ->numeric()
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->required()
                     ->prefix('Rp')
                     ->reactive()
@@ -108,6 +115,7 @@ class StockResource extends Resource
                         }
                     }),
                 Forms\Components\TextInput::make('notes')
+                    ->label('Catatan')
                     ->maxLength(255),
             ]);
     }
@@ -142,10 +150,12 @@ class StockResource extends Resource
                 Tables\Columns\TextColumn::make('quantity')
                     ->numeric(),
                 Tables\Columns\TextColumn::make('unit_cost')
+                    ->label('HPP')
                     ->numeric()
                     ->money('IDR'),
                 Tables\Columns\TextColumn::make('total')
                     ->numeric()
+
                     ->money('IDR'),
 
             ])

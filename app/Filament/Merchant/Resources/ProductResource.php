@@ -8,6 +8,7 @@ use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,7 +33,8 @@ class ProductResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('price')
                     ->required()
-                    ->numeric()
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->prefix('Rp'),
 
                 Forms\Components\Textarea::make(name: 'description')->columnSpanFull(),
