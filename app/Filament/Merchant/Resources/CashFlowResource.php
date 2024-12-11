@@ -10,6 +10,7 @@ use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,6 +30,7 @@ class CashFlowResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('account_id')
+                    ->label('Nama Akun')
                     // ->relationship(
                     //     'account',
                     //     'accountName',
@@ -48,15 +50,21 @@ class CashFlowResource extends Resource
                     ->preload()
                     ->required(),
                 Forms\Components\DatePicker::make('transaction_date')
+                    ->label('Tanggal Transaksi')
                     ->required(),
                 Forms\Components\TextInput::make('description')
+                    ->label('Deskripsi')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('amount')
+                    ->label('Jumlah')
                     ->required()
                     ->prefix('IDR')
-                    ->numeric(),
+                    ->numeric()
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(','),
                 Forms\Components\Select::make('type')
                     ->required()
+                    ->label('Tipe Transaksi')
                     ->options([
                         'debit' => 'Debit',
                         'credit' => 'Credit'
@@ -67,8 +75,10 @@ class CashFlowResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('transaction_date', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('account.accountName')
+                    ->limit(24)
                     ->label('Akun'),
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->label('Tanggal Transaksi')
@@ -76,6 +86,7 @@ class CashFlowResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('description')
                     ->label('Deskripsi')
+                    ->limit(40)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('debit_amount')
                     ->label('Debit')
@@ -100,6 +111,7 @@ class CashFlowResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

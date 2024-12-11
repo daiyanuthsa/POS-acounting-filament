@@ -10,6 +10,7 @@ use Auth;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Notifications\Notification;
@@ -145,7 +146,6 @@ class OrderResource extends Resource
                         Forms\Components\TextInput::make('total')
                             ->label('Sub Total')
                             ->prefix('Rp')
-                            ->numeric()
                             ->disabled()
                             ->dehydrated(false)
                             ->reactive()
@@ -179,7 +179,9 @@ class OrderResource extends Resource
                     ->label('Jenis Pembayaran')
                     ->required(),
                 Forms\Components\TextInput::make('payment_amount')
-                    ->prefix('IDR')
+                    ->prefix('Rp')
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->required()
                     ->numeric(),
             ]);
@@ -190,7 +192,7 @@ class OrderResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                Tables\Columns\TextColumn::make('transaction_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

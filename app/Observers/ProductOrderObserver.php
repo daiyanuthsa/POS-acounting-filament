@@ -15,16 +15,6 @@ class ProductOrderObserver
      */
     public function created(ProductOrder $productOrder): void
     {
-        // Tambahkan transaksi kredit ke akun HPP
-        // CashFlow::create([
-        //     'user_id' => $order->user_id, // User ID dari order
-        //     'team_id' => $order->team_id, // Team ID dari order
-        //     'account_id' => $upcAccount->id, // Account UPC
-        //     'transaction_date' => now()->format('Y-m-d'),
-        //     'description' => 'Order ' . $order->id . ' product ' . $product->name,
-        //     'amount' => $product->getLastBatchStock()->unit_cost * $product->pivot->qty, // total amount
-        //     'type' => 'debit',
-        // ]);
 
         try {
             DB::beginTransaction();
@@ -43,7 +33,7 @@ class ProductOrderObserver
                 'team_id' => $order->team_id,
                 'account_id' => $cashAccount->id,
                 'transaction_date' => now()->format('Y-m-d'),
-                'description' => 'Order ' . $order->id . ' product ' . $product->name,
+                'description' => 'Pesanan produk ' . $product->name . ' ' . $productOrder->qty . ' item',
                 'amount' => $product->price * $productOrder->qty,
                 'type' => 'debit',
             ]);
@@ -54,7 +44,7 @@ class ProductOrderObserver
                 'team_id' => $order->team_id,
                 'account_id' => $product->account_id,
                 'transaction_date' => now()->format('Y-m-d'),
-                'description' => 'Order ' . $order->id . ' product ' . $product->id,
+                'description' => 'Pesanan produk ' . $product->name . ' ' . $productOrder->qty . ' item',
                 'amount' => $product->price * $productOrder->qty,
                 'type' => 'credit',
             ]);
@@ -66,7 +56,7 @@ class ProductOrderObserver
                 'type' => 'out',
                 'quantity' => $productOrder->qty,
                 'total'=> $productOrder->qty,
-                'notes' => 'Pengurangan stok dari pesanan ' . $order->id,
+                'notes' => 'Pengurangan stok ' . $product->name,
             ]);
 
             DB::commit();
