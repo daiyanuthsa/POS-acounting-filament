@@ -53,8 +53,18 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label('Status Akun')
+                    ->afterStateUpdated(function ($record, $state) {
+                        // Runs after the state is saved to the database.
+                        if ($state) {
+                            // Kirim email pemberitahuan jika status akun diubah menjadi aktif
+                            // Gantilah dengan controller/method yang sesuai jika perlu
+                            $record->sendAccountActivationEmail();
+                        }
+                    }),
                 Tables\Columns\TextColumn::make('roles.name')
-                    
+
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

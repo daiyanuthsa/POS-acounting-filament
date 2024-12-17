@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Merchant\Auth\MerchantRegistration;
 use App\Filament\Pages\Tenancy\EditTeamProfile;
 use App\Filament\Pages\Tenancy\RegisterTeam;
+use App\Http\Middleware\CheckIfUserIsActive;
 use App\Models\Team;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -52,19 +53,36 @@ class MerchantPanelProvider extends PanelProvider
 
             ])
             ->middleware([
+                // if(Auth::check()) && Auth::user()->can('')) {
+                //    ; 
+                // },
+                 
                 EncryptCookies::class,
+                
                 AddQueuedCookiesToResponse::class,
+                
                 StartSession::class,
+                
                 AuthenticateSession::class,
+                
                 ShareErrorsFromSession::class,
+                
                 VerifyCsrfToken::class,
+                
                 SubstituteBindings::class,
+                // CheckIfUserIsActive::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                
             ])
             ->authMiddleware([
+                
                 Authenticate::class,
+                CheckIfUserIsActive::class,
             ])
+            ->tenantMiddleware([
+                
+            ], isPersistent: true)
             ->tenant(Team::class, )
             ->tenantRegistration(RegisterTeam::class)
             ->tenantProfile(EditTeamProfile::class)

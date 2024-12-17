@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Mail\AccountStatusChanged;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
@@ -10,6 +11,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Mail;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -29,6 +31,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
         'name',
         'email',
         'password',
+        'is_active',
     ];
 
     /**
@@ -39,6 +42,10 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'is_active'=> 'boolean',
     ];
 
     /**
@@ -59,13 +66,25 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
         $user = Auth::user();
         $roles = $user->getRoleNames();
 
-        if ($panel->getId() === 'admin' && $roles->contains('admin')) {
+        // if ($panel->getId() === 'admin' && $roles->contains('admin')) {
+        //     return true;
+        // } elseif ($panel->getId() === 'merchant' && $roles->contains('merchant')) {
+        //     if ($user->is_active === true) {
+        //         return true;
+        //     }
+        //     return redirect('/');
+        // } else {
+        //     return false;
+        // }
+        if (
+            ($panel->getId() === 'admin' && $roles->contains('admin')) ||
+            ($panel->getId() === 'merchant' && $roles->contains('merchant'))
+        ) {
             return true;
-        } elseif ($panel->getId() === 'merchant' && $roles->contains('merchant')) {
-            return true;
-        } else {
-            return false;
         }
+
+        return false;
+
 
     }
 
@@ -82,5 +101,12 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     public function canAccessTenant(Model $tenant): bool
     {
         return $this->teams()->whereKey($tenant)->exists();
+    }
+
+    // Method untuk mengirim email pemberitahuan
+    public function sendAccountActivationEmail()
+    {
+        // Pastikan untuk mengganti dengan logic pengiriman email yang sesuai
+        Mail::to($this->email)->send(new AccountStatusChanged($this));
     }
 }

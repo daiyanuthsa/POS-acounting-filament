@@ -19,6 +19,9 @@ Route::get('/changes-equity', function () {
     return inertia('ChangesInEquity');
 });
 
+Route::get('/inactive', function () {
+    return view('user-not-active');
+})->name('inactive');
 
 Route::get('/report-balancesheet', [BalanceSheet::class, 'index']);
 Route::get('/profitloss-report', [ProfitLossController::class, 'index']);

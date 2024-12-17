@@ -47,18 +47,10 @@ class MerchantRegistration extends Register
 
             $merchantRole = Role::findOrCreate('merchant');
             $user->assignRole($merchantRole);
-
-            // $team = Team::create([
-            //     'name' => $data['team_name'],
-            //     'slug' => $data['team_slug'],
-            //     'location' => $data['team_location'],
-            // ]);
-            // $user->teams()->attach($team->id);
-
             return $user;
         });
 
-        event(new Registered($user));
+        // event(new Registered($user));
 
         Auth::login($user);
 
