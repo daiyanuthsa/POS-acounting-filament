@@ -38,7 +38,13 @@ class BigBookResource extends Resource
                     ->label('Account')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('account.accountType') // Assuming the relationship to account exists
-                    ->label('Account'),
+                    ->label('Tipe Akun')
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'UPC' => 'HPP',
+                            default => ucfirst($state),
+                        };
+                    }),
                 Tables\Columns\TextColumn::make('debit')
                     ->label('Debit Amount')
                     ->money('IDR'), // Formatting as money in IDR
