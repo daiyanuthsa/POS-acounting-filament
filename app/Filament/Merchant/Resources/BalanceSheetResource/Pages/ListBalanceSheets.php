@@ -21,7 +21,8 @@ class ListBalanceSheets extends ListRecords
         return [
             Actions\Action::make('export')
                 ->label('Cetak Laporan')
-                ->url(url('/report-balancesheet?'. $decodequerystring)),
+                ->url(url('/report-balancesheet?' . $decodequerystring))
+                ->openUrlInNewTab(),
         ];
     }
     protected function getHeaderWidgets(): array
@@ -30,17 +31,4 @@ class ListBalanceSheets extends ListRecords
             AssetsTotal::class,
         ];
     }
-    // public function getTabs(): array
-    // {
-    //     return [
-    //         'Aktiva' => Tab::make('Aktiva')
-    //             ->modifyQueryUsing(function ($query) {
-    //                 return $query->where('accountType', 'Asset');
-    //             }),
-    //         'Pasiva' => Tab::make('Pasiva')
-    //             ->modifyQueryUsing(function ($query) {
-    //                 return $query->whereIn('accountType', ['Liability', 'Equity']);
-    //             }),
-    //     ];
-    // }
 }
