@@ -25,6 +25,8 @@ class StockObserver
                 $this->handleStockIn($stockMovement);
             } elseif ($stockMovement->type === 'out') {
                 $this->handleStockOut($stockMovement);
+            } elseif ($stockMovement->type === 'start') {
+                $this->handleStartStock($stockMovement);
             }
 
             DB::commit();
@@ -53,6 +55,37 @@ class StockObserver
         $this->createCashTransaction($stockMovement);
     }
 
+    private function handleStartStock(StockMovement $stockMovement)
+    {
+        // Set initial values
+        $stockMovement->remaining_quantity = $stockMovement->quantity;
+        $stockMovement->is_active = true;
+        $stockMovement->save();
+
+        // Create financial transactions
+        $this->createInventoryTransaction($stockMovement);
+        $this->createEquityTransaction($stockMovement);
+    }
+    private function createEquityTransaction(StockMovement $stockMovement)
+    {
+        // Ambil akun kas untuk tim terkait (sesuaikan dengan kebutuhan Anda)
+        $equityAccount = Account::where('team_id', $stockMovement->team_id)
+            ->where('accountType', 'Equity')
+            ->where('code', 'like', '3-110') // Sesuaikan dengan nama atau kriteria akun kas
+            ->first();
+
+        if ($equityAccount) {
+            CashFlow::create([
+                'user_id' => $stockMovement->user_id,
+                'team_id' => $stockMovement->team_id,
+                'account_id' => $equityAccount->id,
+                'transaction_date' => now(),
+                'description' => 'Pengurangan kas untuk stok ' . $stockMovement->product->name,
+                'amount' => $stockMovement->total,
+                'type' => 'credit',
+            ]);
+        }
+    }
     /**
      * Membuat transaksi debit pada akun persediaan (inventory)
      *

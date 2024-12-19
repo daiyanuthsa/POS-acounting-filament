@@ -24,12 +24,18 @@
                 <h4 class="font-bold">MODAL AWAL</h4>
                 <table class="w-full mb-4">
                     <tbody>
+                        @php
+                            $equityBalance = 0;
+                        @endphp
                         @foreach ($modal as $account)
                             <tr>
                                 <td class="pl-5">{{ $account->account_code }}</td>
                                 <td>{{ $account->account_name }}</td>
                                 <td class="text-right">{{ number_format($account->balance, 2) }}</td>
                             </tr>
+                            @php
+                                $equityBalance += $account->balance;
+                            @endphp
                         @endforeach
                     </tbody>
                 </table>
@@ -48,10 +54,10 @@
                                     <td>{{ $account->account_name }}</td>
                                     <td class="text-right">{{ number_format($account->balance, 2) }}</td>
                                 </tr>
+                                @php
+                                    $totalMovement += $account->balance;
+                                @endphp
                             @endif
-                            @php
-                                $totalMovement += $account->balance;
-                            @endphp
                         @endforeach
                     </tbody>
                 </table>
@@ -74,7 +80,7 @@
                             <td class="pl-5">
                                 MODAL AKHIR
                             </td>
-                            <td class="text-right">{{ number_format($openningBalance + $totalMovement, 2) }}</td>
+                            <td class="text-right">{{ number_format($equityBalance + $totalMovement, 2) }}</td>
                         </tr>
                     </tbody>
                 </table>

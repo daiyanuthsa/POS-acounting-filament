@@ -46,6 +46,7 @@ class StockResource extends Resource
                     ->options([
                         'in' => 'Stok Masuk',
                         'out' => 'Stok Keluar',
+                        'start'=> 'Stok Awal',
                     ])
                     ->dehydrated(),
                 Forms\Components\TextInput::make('quantity')
@@ -72,7 +73,7 @@ class StockResource extends Resource
                     ->required()
                     ->numeric()
                     ->mask(RawJs::make('$money($input)'))
-                    ->stripCharacters(',')
+                    ->stripCharacters('.')
                     ->prefix('Rp')
                     ->reactive()
                     ->afterStateUpdated(function ($set, $get) {
@@ -94,14 +95,14 @@ class StockResource extends Resource
                 Forms\Components\TextInput::make('unit_cost')
                     ->label('Harga Per Produk')
                     ->numeric()
-                    ->mask(RawJs::make('$money($input)'))
-                    ->stripCharacters(',')
+                    // ->mask(RawJs::make('$money($input)'))
+                    // ->stripCharacters(',')
                     ->required()
                     ->prefix('Rp')
                     ->reactive()
                     ->afterStateUpdated(function ($set, $get) {
                         $quantity = floatval($get('quantity'));
-                        $total = floatval($get('total'));
+                        $total = $get('total');
                         $unit_cost = floatval($get('unit_cost'));
 
                         if ($unit_cost > 0) {
