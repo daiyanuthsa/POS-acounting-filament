@@ -17,6 +17,7 @@ class ListEquityStatements extends ListRecords
             Actions\Action::make('export')
                 ->label('Cetak Laporan')
                 ->url(url('/equitystatement-report?' . $decodequerystring))
+                ->openUrlInNewTab()
         ];
     }
 }

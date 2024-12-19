@@ -46,7 +46,7 @@ class StockResource extends Resource
                     ->options([
                         'in' => 'Stok Masuk',
                         'out' => 'Stok Keluar',
-                        'start'=> 'Stok Awal',
+                        'start' => 'Stok Awal',
                     ])
                     ->dehydrated(),
                 Forms\Components\TextInput::make('quantity')
@@ -140,6 +140,7 @@ class StockResource extends Resource
                         return match ($state) {
                             'in' => 'Masuk',
                             'out' => 'Keluar',
+                            'start' => 'Modal',
                             default => ucfirst($state),
                         };
                     })
@@ -147,6 +148,7 @@ class StockResource extends Resource
                     ->color(fn(string $state): string => match ($state) {
                         'out' => 'danger',
                         'in' => 'success',
+                        default => 'success',
                     }),
                 Tables\Columns\TextColumn::make('quantity')
                     ->numeric(),

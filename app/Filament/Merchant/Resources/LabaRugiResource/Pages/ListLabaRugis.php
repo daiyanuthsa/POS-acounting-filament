@@ -19,6 +19,7 @@ class ListLabaRugis extends ListRecords
             Actions\Action::make('export')
                 ->label('Cetak Laporan')
                 ->url(url('/profitloss-report?' . $decodequerystring))
+                ->openUrlInNewTab()
         ];
     }
 
