@@ -29,7 +29,10 @@ class BigBookResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultGroup('account.accountName')
+            ->defaultSort('code')
+            ->defaultGroup('code')
+
+            ->defaultPaginationPageOption(50)
             ->columns([
                 Tables\Columns\TextColumn::make('account.code') // Relationship to account
                     ->label('Kode')
@@ -105,7 +108,9 @@ class BigBookResource extends Resource
                     }),
             ], layout: FiltersLayout::AboveContent)
             ->groups([
-                Group::make('account.accountName')
+                Group::make('code')
+                ->label('Akun')
+                    ->getTitleFromRecordUsing(fn(BigBook $record): string => $record->code . ' ' . $record->Account)
                     ->collapsible()
             ])
             ->groupingSettingsHidden()

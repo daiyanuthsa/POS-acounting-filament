@@ -33,6 +33,7 @@ class AccountResource extends Resource
         $teamId = auth()->user()->teams()->first()->id;
 
         return $form
+            
             ->schema([
                 Forms\Components\TextInput::make('code')
                     ->required()
@@ -127,6 +128,7 @@ class AccountResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('code')
             ->columns([
                 Tables\Columns\TextColumn::make('code')
                     ->label('Kode')
