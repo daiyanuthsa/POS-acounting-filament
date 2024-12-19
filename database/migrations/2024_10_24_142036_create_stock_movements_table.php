@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products');
             $table->foreignId('team_id')->constrained('teams');
             $table->foreignId('user_id')->constrained(table: 'users');
-            $table->enum('type', ['in', 'out']);
+            $table->enum('type', ['in', 'out', 'start'])->default('');
             $table->integer('quantity');
             $table->unsignedBigInteger('unit_cost')->nullable();
             $table->unsignedBigInteger('total');

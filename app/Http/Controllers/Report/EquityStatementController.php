@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Report;
 
 use App\Casts\MoneyCast;
 use App\Http\Controllers\Controller;
+use App\Models\CashFlow;
 use App\Models\LabaRugi;
 use Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -32,11 +33,8 @@ class EquityStatementController extends Controller
         $modal = $this->getEquityBalances($year, 'Equity', $merchant->id, '3-110');
 
         $equityMovement = $this->getAccountBalances($year, 'Equity', $merchant->id);
-        $openningBalance = $this->getTotalBalanceBeforeYear($year, 'Equity', $merchant->id);
-        $revenueBeforeYear = $this->calculateRevenue($year, '<', $merchant->id);
         $currentRevenue = $this->calculateRevenue($year, '=', $merchant->id);
 
-        $profitPosition = $currentRevenue < 0 ? 'Rugi' : 'Laba';
 
         $equityMovement->transform(function ($item) use ($currentRevenue) {
             if ($item->account_code === '3-310') {
@@ -52,7 +50,6 @@ class EquityStatementController extends Controller
                 'merchant' => $merchant->name,
                 'modal' => $modal,
                 'equityMovement' => $equityMovement,
-                'openningBalance' => $openningBalance + $revenueBeforeYear,
             ]
         )->setPaper('a4', 'potrait');
 
@@ -171,7 +168,14 @@ class EquityStatementController extends Controller
             ->pluck('total', 'type')
             ->toArray();
 
-        $pendapatan = abs($totals['Revenue'] ?? 0);
+        $profitAccount = CashFlow::query()
+            ->join('accounts', 'cash_flows.account_id', '=', 'accounts.id')
+            ->where('cash_flows.team_id', $team_id) // Specify the team_id from cash_flows table
+            ->where('accounts.code', '3-310')
+            ->whereYear('transaction_date', $operator, $year)
+            ->sum('amount');
+
+        $pendapatan = abs($totals['Revenue'] ?? 0) + $profitAccount;
         $pengeluaran = abs($totals['Expense'] ?? 0);
         $hpp = abs($totals['UPC'] ?? 0);
 

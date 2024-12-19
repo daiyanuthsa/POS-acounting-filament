@@ -57,6 +57,7 @@ class EquityStatementResource extends Resource
                         $movement = $record->movement;
                         $labaRugi = self::calculateLabaRugi();
                         if ($record->code === '3-310') {
+
                             $movement += $labaRugi;
                         }
                         return $movement;
@@ -67,13 +68,16 @@ class EquityStatementResource extends Resource
                     ->money('IDR')
                     ->getStateUsing(function (Account $record) {
                         $closingBalance = $record->closing_balance;
+                        
                         $saldoawal = self::calculateRevenueBeforeYear();
                         $labaRugi = self::calculateLabaRugi();
                         if ($record->code === '3-310') {
                             $closingBalance += $labaRugi;
                             $closingBalance += $saldoawal;
                         }
+                        
                         return $closingBalance;
+                        
                     })
 
                     ->summarize([Sum::make()->formatStateUsing(fn($state) => 'Rp ' . number_format($state + (self::calculateLabaRugi() + self::calculateRevenueBeforeYear()) , 2))])
