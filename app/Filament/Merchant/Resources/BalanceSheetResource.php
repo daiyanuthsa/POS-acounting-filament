@@ -29,9 +29,10 @@ class BalanceSheetResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(50)
             ->columns([
                 Tables\Columns\TextColumn::make('accountType')
-                    ->label('Nama Akun')
+                    ->label('Tipe Akun')
                     ->sortable()
                     ->formatStateUsing(function ($state) {
                         return match ($state) {
@@ -48,7 +49,7 @@ class BalanceSheetResource extends Resource
                         'Equity' => 'success',
                     }),
                 Tables\Columns\TextColumn::make('code')
-                    ->label('Nama Akun')
+                    ->label('Kode')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('accountName')
                     ->label('Nama Akun')
@@ -82,7 +83,7 @@ class BalanceSheetResource extends Resource
                         //     $query->whereYear('cash_flows.transaction_date', '<=', $year)
                         //         ->orWhereNull('cash_flows.transaction_date');
                         // });
-
+            
                         return $query;
                     })->selectablePlaceholder(false),
             ], layout: FiltersLayout::AboveContent)
@@ -98,7 +99,7 @@ class BalanceSheetResource extends Resource
     {
 
         $year = request('tableFilters.year.value', date('Y'));
-        
+
         $teamId = auth()->user()->teams()->first()->id;
 
         return parent::getEloquentQuery()
