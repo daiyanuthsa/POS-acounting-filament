@@ -40,7 +40,7 @@
                     <tr>
                         <td class="header"
                             style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; padding: 25px 0; text-align: center;">
-                            <a href="http://localhost:8000"
+                            <a href="{{ env('APP_URL') }}"
                                 style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; color: #3d4852; font-size: 19px; font-weight: bold; text-decoration: none; display: inline-block;">
                                 UMKM Bajo
                             </a>
@@ -83,7 +83,7 @@
                                                                     <tr>
                                                                         <td
                                                                             style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative;">
-                                                                            <a href="http://filament-pos-accounting.test:8080/merchant/login"
+                                                                            <a href="{{ env('APP_URL') }}/merchant/login"
                                                                                 class="button button-primary"
                                                                                 target="_blank" rel="noopener"
                                                                                 style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; -webkit-text-size-adjust: none; border-radius: 4px; color: #fff; display: inline-block; overflow: hidden; text-decoration: none; background-color: #2d3748; border-bottom: 8px solid #2d3748; border-left: 18px solid #2d3748; border-right: 18px solid #2d3748; border-top: 8px solid #2d3748;">
@@ -114,12 +114,15 @@
                                                     style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative;">
                                                     <p
                                                         style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; line-height: 1.5em; margin-top: 0; text-align: left; font-size: 14px;">
-                                                        If you're having trouble clicking the "Verify Email Address"
-                                                        button, copy and paste the URL below
-                                                        into your web browser: <span class="break-all"
-                                                            style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; word-break: break-all;"><a
-                                                                href="http://filament-pos-accounting.test:8080/merchant/email-verification/verify/8/f885627980d3ce6eefa698bcde889fb8dfb48a80?expires=1734166350&amp;signature=ed03141fc6f2cc88bb4fd8853c54e2e857dc71e5c92e0fb6569fb85a959e2c8d"
-                                                                style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; color: #3869d4;">http://filament-pos-accounting.test:8080/merchant/email-verification/verify/8/f885627980d3ce6eefa698bcde889fb8dfb48a80?expires=1734166350&amp;signature=ed03141fc6f2cc88bb4fd8853c54e2e857dc71e5c92e0fb6569fb85a959e2c8d</a></span>
+                                                        Jika Anda mengalami kesulitan mengklik tombol "Masuk", salin dan
+                                                        tempel URL di bawah ini ke browser web Anda:
+                                                        <span class="break-all"
+                                                            style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; word-break: break-all;">
+                                                            <a href="{{ env('APP_URL') }}/merchant/login"
+                                                                style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; color: #3869d4;">
+                                                                {{ env('APP_URL') }}/merchant/login
+                                                            </a>
+                                                        </span>
                                                     </p>
 
                                                 </td>

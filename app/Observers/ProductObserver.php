@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Account;
 use App\Models\Product;
+use Log;
 
 class ProductObserver
 {
@@ -47,15 +48,27 @@ class ProductObserver
 
     private function createInventoryAccount(Product $product)
     {
-        $lastAccount = Account::where('code', 'like', '1-14%')
+ 
+        // Ambil akun terakhir berdasarkan kode yang sesuai dengan pola `1-1XX`
+        $lastAccount = Account::where('code', 'like', '1-1%')
             ->where('team_id', $product->team_id)
-            ->orderBy('code', 'desc')
+            // Asumsikan database menggunakan MySQL, sesuaikan dengan database Anda
+            ->orderByRaw('CAST(SUBSTRING(code, 3) AS UNSIGNED) DESC')
             ->first();
 
-        $newCode = $lastAccount
-            ? '1-14' . (intval(substr($lastAccount->code, 6)) + 1)
-            : '1-141';
+        Log::info('Kode akun terakhir: ' . json_encode($lastAccount));
 
+        $newCode = $lastAccount
+            ? '1-1' . str_pad((intval(substr($lastAccount->code, 3)) + 1), 2, '0', STR_PAD_LEFT)
+            : '1-140';
+
+        Log::info('Kode akun baru: ' . $newCode);
+        // Validasi panjang kode (maksimal 5 karakter)
+        if (strlen($newCode) > 5) {
+            throw new \Exception("Panjang kode melebihi batas maksimal (5 karakter)");
+        }
+
+        // Buat akun baru
         return Account::create([
             'code' => $newCode,
             'accountName' => 'Persediaan ' . $product->name,
@@ -66,9 +79,10 @@ class ProductObserver
         ]);
     }
 
+
     private function createCOGAccount(Product $product)
     {
-        $lastAccount = Account::where('code', 'like', '5-11%')
+        $lastAccount = Account::where('code', 'like', '5-%')
             ->where('team_id', $product->team_id)
             ->orderBy('code', 'desc')
             ->first();

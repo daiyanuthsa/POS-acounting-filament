@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Log;
 
 class UserResource extends Resource
 {
@@ -61,7 +62,9 @@ class UserResource extends Resource
                             // Kirim email pemberitahuan jika status akun diubah menjadi aktif
                             // Gantilah dengan controller/method yang sesuai jika perlu
                             $record->sendAccountActivationEmail();
+                            Log::info('Email Sended');
                         }
+                        Log::info('Account Status Updated:'. $state);
                     }),
                 Tables\Columns\TextColumn::make('roles.name')
 
